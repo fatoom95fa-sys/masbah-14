@@ -3,64 +3,48 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مسبحة 14</title>
+<title>مسبحة 14 معصوم</title>
 <style>
-body{font-family:tahoma;text-align:center;background:#fdf6f0;margin:0;padding:20px}
-.total-box{background:#fff;border:2px solid #d4a574;border-radius:15px;padding:15px;margin:15px auto;max-width:400px;font-size:18px}
-.counter{font-size:90px;margin:20px;color:#8b4513}
-button.main{font-size:28px;padding:20px 60px;border-radius:50px;background:#d4a574;border:none;color:white;cursor:pointer;margin:5px}
-button.add{background:#fff;border:1px solid #d4a574;padding:10px 20px;border-radius:10px;margin:5px;cursor:pointer}
-button.reset{margin-top:15px;background:#eee;border:none;padding:8px 20px;border-radius:10px}
-.ehdaa{margin-top:25px;background:#fff;padding:15px;border-radius:15px;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.8;font-size:15px;border:1px solid #e0c9a6}
+body{background:#0e211b;color:#fff;font-family:Tahoma;text-align:center;padding:15px;margin:0}
+h1{color:#ffd700}
+.card{background:#173025;border-radius:18px;padding:16px;margin:12px auto;max-width:420px;border:1px solid #2a5a44}
+.num{font-size:38px;font-weight:bold;color:#ffd700}
+.num small{font-size:18px;color:#9ac9a9}
+.bar{height:10px;background:#0a1a15;border-radius:10px;overflow:hidden;margin:10px 0}
+.fill{height:100%;width:0%;background:linear-gradient(90deg,#ffd700,#ff9800);transition:.3s}
+button{border:none;padding:9px 12px;margin:3px;border-radius:10px;font-weight:bold;color:#fff;cursor:pointer;font-size:14px}
+.b1{background:#2e7d32}.b10{background:#0277bd}.b50{background:#ef6c00}.b100{background:#c62828}
+.bm{background:#444}.bm10{background:#222}
 </style>
 </head>
 <body>
-
-<div class="total-box">
-العداد العام للجميع: <span id="globalCount">0</span>
-</div>
-
-<h2>مسبحة الصلوات</h2>
-<div class="counter" id="count">0</div>
-
-<button class="main" onclick="tasbeeh()">سبح</button>
-<br><br>
-<br>
-<button class="reset" onclick="resetCounter()">تصفير</button>
-
-<div class="ehdaa">
-
-اهداء ثواب هذي الصلوات آلى الأنبياء والمرسلين والأولياء الصالحين والى اهل البيت صلوات الله عليهم والى جميع موتانا وموتى المؤمنين والمؤمنات والمسلمين والمسلمات الأحياء منهم والأموات من الأولين والأخرين
-</div>
-
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+<h1>📿 مسبحة 14 معصوم</h1>
+<div id="box"></div>
 <script>
-const firebaseConfig = {
-  databaseURL: "https://masbah-14-default-rtdb.firebaseio.com",
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-
-let count = parseInt(localStorage.getItem('myCount')||'0');
-document.getElementById('count').innerText = count;
-
-function tasbeeh(){ addCount(1); }
-function addCount(num){
-  count += num;
-  if(count>=1000){count=0;}
-  localStorage.setItem('myCount',count);
-  document.getElementById('count').innerText=count;
-  db.ref('total').transaction(c=>(c||0)+num);
-}
-function resetCounter(){
-  count=0;
-  localStorage.setItem('myCount','0');
-  document.getElementById('count').innerText=0;
-}
-db.ref('total').on('value',snap=>{
-  document.getElementById('globalCount').innerText=snap.val()||0;
+const NS="masbah14-with-minus-V8";
+const names=["النبي محمد ﷺ","الإمام علي عليه السلام","فاطمة الزهراء عليها السلام","الإمام الحسن عليه السلام","الإمام الحسين عليه السلام","الإمام السجاد عليه السلام","الإمام الباقر عليه السلام","الإمام الصادق عليه السلام","الإمام الكاظم عليه السلام","الإمام الرضا عليه السلام","الإمام الجواد عليه السلام","الإمام الهادي عليه السلام","الإمام العسكري عليه السلام","الإمام المهدي عجل الله فرجه"];
+let vals=Array(14).fill(0);
+const box=document.getElementById("box");
+names.forEach((n,i)=>{
+ box.innerHTML+=`<div class="card"><div>${n}</div><div class="num" id="c${i}">0 <small>/ 1000</small></div><div class="bar"><div class="fill" id="f${i}"></div></div><div><button class="b1" onclick="add(${i},1)">+1</button><button class="b10" onclick="add(${i},10)">+10</button><button class="b50" onclick="add(${i},50)">+50</button><button class="b100" onclick="add(${i},100)">+100</button><br><button class="bm" onclick="add(${i},-1)">-1</button><button class="bm10" onclick="add(${i},-10)">-10 تراجع</button></div></div>`;
 });
+function render(i){
+ let v=vals[i]; if(v<0) v=0; vals[i]=v;
+ let m=v%1000;
+ document.getElementById(`c${i}`).innerHTML=`${m} <small>/ 1000</small>`;
+ document.getElementById(`f${i}`).style.width=(m/10)+"%";
+}
+async function load(i){ try{ let r=await fetch(`https://abacus.jasoncameron.dev/get/${NS}/m${i}`); let d=await r.json(); if(d.value!=null) vals[i]=Number(d.value); render(i);}catch{} }
+async function add(i,n){
+ vals[i]+=n; if(vals[i]<0) vals[i]=0;
+ render(i);
+ if(n>0){
+  for(let k=0;k<n;k++) fetch(`https://abacus.jasoncameron.dev/hit/${NS}/m${i}`);
+ }else{
+  fetch(`https://abacus.jasoncameron.dev/set/${NS}/m${i}?value=${vals[i]}`);
+ }
+}
+names.forEach((_,i)=>load(i));
 </script>
 </body>
 </html>
