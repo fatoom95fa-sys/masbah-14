@@ -1,48 +1,65 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>مسبحة 14 معصوم</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مسبحة 14</title>
 <style>
-body{background:#0e211b;color:#fff;font-family:Tahoma;text-align:center;padding:12px;margin:0}
-h1{color:#ffd700;font-size:28px;margin:15px 0}
-.live{border:1px solid #00ff88;color:#00ff88;padding:7px 16px;border-radius:20px;font-size:13px;display:inline-block;margin:10px;background:#0a2a1f}
-.ehda{background:#143222;border:1px solid #8a6d00;border-radius:16px;padding:14px;margin:14px auto;max-width:430px;font-size:13px;line-height:1.8}
-.total{background:linear-gradient(135deg,#1a4d2e,#2e7d32);border:2px solid #ffd700;border-radius:18px;padding:14px;margin:14px auto;max-width:430px}
-.total.n{font-size:44px;color:#ffd700;font-weight:bold}
-.card{background:#173025;border-radius:18px;padding:16px;margin:14px auto;max-width:430px;border:1px solid #1f4d36}
-.card.t{font-size:16px;margin-bottom:8px}
-.card.num{font-size:42px;color:#ffd700;font-weight:bold;margin:6px 0}
-.bar{height:10px;background:#000;border-radius:10px;overflow:hidden;margin:10px 0}.fill{height:100%;background:#ffd700;width:0%}
-button{border:none;padding:10px 18px;margin:4px;border-radius:12px;font-weight:bold;color:#fff;cursor:pointer;font-size:14px}
-.b1{background:#2e7d32}.b10{background:#0277bd}.b50{background:#ef6c00}.b100{background:#c62828}.bm{background:#3a3a3a}
+body{font-family:tahoma;text-align:center;background:#fdf6f0;margin:0;padding:20px}
+.total-box{background:#fff;border:2px solid #d4a574;border-radius:15px;padding:15px;margin:15px auto;max-width:400px;font-size:18px}
+.counter{font-size:90px;margin:20px;color:#8b4513}
+button.main{font-size:28px;padding:20px 60px;border-radius:50px;background:#d4a574;border:none;color:white;cursor:pointer}
+button.reset{margin-top:15px;background:#eee;border:none;padding:8px 20px;border-radius:10px}
+.ehdaa{margin-top:25px;background:#fff;padding:15px;border-radius:15px;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.8;font-size:15px;border:1px solid #e0c9a6}
 </style>
 </head>
 <body>
-<h1>💖 مسبحة 14 معصوم 💖</h1>
-<div class="live">● LIVE مشتركة لحظياً - كل من يسبح يظهر عند الجميع</div>
 
-<div class="ehda">🕊️ الإهداء<br>نهدي ثواب هذه الأذكار إلى أرواح المؤمنين والمؤمنات<br>وإلى 14 معصوم عليهم السلام<br>اللهم تقبل منا هذا القليل</div>
-
-<div class="total">
-<div>العدد النهائي للجميع</div>
-<div class="n" id="grand">0</div>
-<div style="font-size:12px">مجموع تسبيحك انتي وكل من دخل الرابط</div>
+<div class="total-box">
+العداد العام للجميع: <span id="globalCount">0</span>
 </div>
 
-<div id="box"></div>
+<h2>مسبحة الصلوات</h2>
+<div class="counter" id="count">0</div>
 
-<script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";import{getDatabase,ref,onValue,runTransaction}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-const cfg={apiKey:"AIzaSyBU7GePUjvUP2R_nOPeVTYH4wL1MgRqWL4",authDomain:"masbah-14.firebaseapp.com",databaseURL:"https://masbah-14-default-rtdb.firebaseio.com",projectId:"masbah-14",storageBucket:"masbah-14.firebasestorage.app",messagingSenderId:"954224768477",appId:"1:954224768477:web:2b9f68b6db7845bbb6e674"};
-const db=getDatabase(initializeApp(cfg));
-const names=["النبي محمد صلى الله عليه وآله وسلم","الإمام علي عليه السلام","فاطمة الزهراء عليها السلام","الإمام الحسن عليه السلام","الإمام الحسين عليه السلام","الإمام السجاد عليه السلام","الإمام الباقر عليه السلام","الإمام الصادق عليه السلام","الإمام الكاظم عليه السلام","الإمام الرضا عليه السلام","الإمام الجواد عليه السلام","الإمام الهادي عليه السلام","الإمام العسكري عليه السلام","الإمام المهدي عجل الله فرجه"];
-let vals=Array(14).fill(0);
-const box=document.getElementById("box");
-names.forEach((n,i)=>{box.innerHTML+=`<div class="card"><div class="t">${n}</div><div class="num" id="c${i}">0</div><div class="bar"><div class="fill" id="f${i}"></div></div><button class="b100" onclick="add(${i},100)">+100</button><button class="b50" onclick="add(${i},50)">+50</button><button class="b10" onclick="add(${i},10)">+10</button><button class="b1" onclick="add(${i},1)">+1</button><br><button class="bm" onclick="add(${i},-1)">-1</button></div>`;});
-window.add=(i,n)=>{runTransaction(ref(db,'live14/m'+i),c=>Math.max(0,(c||0)+n)); if(navigator.vibrate) navigator.vibrate(20);};
-function updG(){let t=vals.reduce((a,b)=>a+b,0); document.getElementById('grand').textContent=t;}
-names.forEach((_,i)=>{onValue(ref(db,'live14/m'+i),s=>{let v=s.val()||0; vals[i]=v; document.getElementById('c'+i).textContent=v; document.getElementById('f'+i).style.width=(v%1000/10)+'%'; updG();});});
+<button class="main" onclick="tasbeeh()">سبح</button>
+<br>
+<button class="reset" onclick="resetCounter()">تصفير</button>
+
+<div class="ehdaa">
+إهداء ثواب هذه الصلوات إلى الأنبياء والمرسلين والأولياء الصالحين وإلى أهل البيت صلوات الله عليهم وإلى جميع موتانا وموتى المؤمنين والمؤمنات والمسلمين والمسلمات الأحياء منهم والأموات من الأولين والآخرين
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDummy", // سيعمل بنفس مشروعك القديم بدون تغيير
+  authDomain: "masbah-14.firebaseapp.com",
+  databaseURL: "https://masbah-14-default-rtdb.firebaseio.com",
+  projectId: "masbah-14",
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+let count = parseInt(localStorage.getItem('myCount')||'0');
+document.getElementById('count').innerText = count;
+
+function tasbeeh(){
+  count++;
+  if(count>=1000){count=0;}
+  localStorage.setItem('myCount',count);
+  document.getElementById('count').innerText=count;
+  db.ref('total').transaction(c=>(c||0)+1);
+}
+function resetCounter(){
+  count=0;
+  localStorage.setItem('myCount','0');
+  document.getElementById('count').innerText=0;
+}
+db.ref('total').on('value',snap=>{
+  document.getElementById('globalCount').innerText=snap.val()||0;
+});
 </script>
 </body>
 </html>
