@@ -8,7 +8,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@700;800&display=swap');
 *{box-sizing:border-box}
 body{margin:0;padding:15px;background:#0f251a;color:#fff;font-family:'Tajawal',tahoma;text-align:center}
-h1{color:#ffde59;font-size:28px}
+h1{color:#ffde59;font-size:28px;margin:10px 0}
 .live{border:1px solid #2ecc71;color:#2ecc71;border-radius:25px;padding:6px 16px;display:inline-block;font-size:13px;margin-bottom:12px}
 .myBar{background:linear-gradient(90deg,#d4b44a,#ffde59);color:#0f251a;border-radius:20px;padding:10px 18px;display:flex;justify-content:space-between;font-weight:800;max-width:500px;margin:0 auto 14px}
 .card{background:#1c3526;border:1.5px solid #d4b44a;border-radius:18px;padding:18px;margin:14px auto;max-width:500px}
@@ -16,12 +16,12 @@ h1{color:#ffde59;font-size:28px}
 .ehdaaText{font-size:14px;color:#e8e8e8;line-height:2}
 .totalNum{font-size:30px;color:#ffde59;font-weight:800}
 .totalBar{height:12px;background:#00000055;border-radius:10px;margin:10px 0;overflow:hidden}
-.totalBar span{display:block;height:100%;background:#ffde59}
-.count{font-size:50px;color:#ffde59;font-weight:800}
+.totalBar span{display:block;height:100%;background:#ffde59;transition:width.3s}
+.count{font-size:50px;color:#ffde59;font-weight:800;margin:5px 0}
 .progress{height:10px;background:#00000055;border-radius:10px;margin:10px 0;overflow:hidden}
-.progress span{display:block;height:100%;background:#ffde59}
-.btnPlus{background:#2e8a4a;border:none;border-radius:14px;padding:14px 45px;font-size:20px;font-weight:800;color:#fff}
-.btnMinus{background:#3a3a3a;border:none;border-radius:14px;padding:14px 45px;font-size:20px;font-weight:800;color:#fff}
+.progress span{display:block;height:100%;background:#ffde59;transition:width.3s}
+.btnPlus{background:#2e8a4a;border:none;border-radius:14px;padding:16px;font-size:22px;font-weight:800;color:#fff;width:100%;max-width:260px;cursor:pointer}
+.btnPlus:active{transform:scale(0.95)}
 </style>
 </head>
 <body>
@@ -51,15 +51,42 @@ let myTotal=parseInt(localStorage.getItem('myTotal')||'0');
 let mySession=parseInt(sessionStorage.getItem('mySession')||'0');
 function refreshMine(){document.getElementById('myTotal').innerText=myTotal;document.getElementById('mySession').innerText=mySession;}
 refreshMine();
-let h="";names.forEach((n,i)=>{h+=`<div class="card"><div style="font-size:17px;font-weight:700">${n}</div><div style="font-size:12px;color:#aaa"><span id="t${i}">0</span> / 1000</div><div class="count" id="c${i}">0</div><div class="progress"><span id="p${i}" style="width:0%"></span></div><div style="display:flex;gap:14px;justify-content:center;margin-top:14px"><button class="btnPlus" onclick="add(${i},1)">+1</button><button class="btnMinus" onclick="add(${i},-1)">-1</button></div></div>`});
+let h="";
+names.forEach((n,i)=>{
+h+=`<div class="card">
+<div style="font-size:17px;font-weight:700">${n}</div>
+<div style="font-size:12px;color:#aaa"><span id="t${i}">0</span> / 1000</div>
+<div class="count" id="c${i}">0</div>
+<div class="progress"><span id="p${i}" style="width:0%"></span></div>
+<div style="margin-top:14px"><button class="btnPlus" onclick="add(${i})">+1 صلوات</button></div>
+</div>`;
+});
 document.getElementById('list').innerHTML=h;
-function add(idx,num){
-if(num>0){myTotal++;mySession++;}else{if(myTotal>0)myTotal--;mySession=Math.max(0,mySession-1);}
-localStorage.setItem('myTotal',myTotal);sessionStorage.setItem('mySession',mySession);refreshMine();
-db.ref('masbah/'+idx).transaction(c=>{let v=(c||0)+num;if(v<0)v=0;if(v>1000)v=1000;return v;});
+function add(idx){
+myTotal++;mySession++;
+localStorage.setItem('myTotal',myTotal);
+sessionStorage.setItem('mySession',mySession);
+refreshMine();
+if(navigator.vibrate) navigator.vibrate(40);
+db.ref('masbah/'+idx).transaction(c=>{
+let v=(c||0)+1;
+if(v>1000) v=1000;
+return v;
+});
 }
 let all=new Array(14).fill(0);
-names.forEach((_,i)=>{db.ref('masbah/'+i).on('value',s=>{let v=s.val()||0;all[i]=v;document.getElementById('c'+i).innerText=v;document.getElementById('t'+i).innerText=v;document.getElementById('p'+i).style.width=(v/10)+"%";let total=all.reduce((a,b)=>a+b,0);document.getElementById('totalAll').innerText=total;document.getElementById('barAll').style.width=(total/140)+"%";});});
+names.forEach((_,i)=>{
+db.ref('masbah/'+i).on('value',s=>{
+let v=s.val()||0;
+all[i]=v;
+document.getElementById('c'+i).innerText=v;
+document.getElementById('t'+i).innerText=v;
+document.getElementById('p'+i).style.width=(v/10)+"%";
+let total=all.reduce((a,b)=>a+b,0);
+document.getElementById('totalAll').innerText=total;
+document.getElementById('barAll').style.width=(total/140)+"%";
+});
+});
 </script>
 </body>
 </html>
