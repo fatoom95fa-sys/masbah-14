@@ -8,7 +8,8 @@
 body{font-family:tahoma;text-align:center;background:#fdf6f0;margin:0;padding:20px}
 .total-box{background:#fff;border:2px solid #d4a574;border-radius:15px;padding:15px;margin:15px auto;max-width:400px;font-size:18px}
 .counter{font-size:90px;margin:20px;color:#8b4513}
-button.main{font-size:28px;padding:20px 60px;border-radius:50px;background:#d4a574;border:none;color:white;cursor:pointer}
+button.main{font-size:28px;padding:20px 60px;border-radius:50px;background:#d4a574;border:none;color:white;cursor:pointer;margin:5px}
+button.add{background:#fff;border:1px solid #d4a574;padding:10px 20px;border-radius:10px;margin:5px;cursor:pointer}
 button.reset{margin-top:15px;background:#eee;border:none;padding:8px 20px;border-radius:10px}
 .ehdaa{margin-top:25px;background:#fff;padding:15px;border-radius:15px;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.8;font-size:15px;border:1px solid #e0c9a6}
 </style>
@@ -23,21 +24,20 @@ button.reset{margin-top:15px;background:#eee;border:none;padding:8px 20px;border
 <div class="counter" id="count">0</div>
 
 <button class="main" onclick="tasbeeh()">سبح</button>
+<br><br>
 <br>
 <button class="reset" onclick="resetCounter()">تصفير</button>
 
 <div class="ehdaa">
-إهداء ثواب هذه الصلوات إلى الأنبياء والمرسلين والأولياء الصالحين وإلى أهل البيت صلوات الله عليهم وإلى جميع موتانا وموتى المؤمنين والمؤمنات والمسلمين والمسلمات الأحياء منهم والأموات من الأولين والآخرين
+
+اهداء ثواب هذي الصلوات آلى الأنبياء والمرسلين والأولياء الصالحين والى اهل البيت صلوات الله عليهم والى جميع موتانا وموتى المؤمنين والمؤمنات والمسلمين والمسلمات الأحياء منهم والأموات من الأولين والأخرين
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 <script>
 const firebaseConfig = {
-  apiKey: "AIzaSyDummy", // سيعمل بنفس مشروعك القديم بدون تغيير
-  authDomain: "masbah-14.firebaseapp.com",
   databaseURL: "https://masbah-14-default-rtdb.firebaseio.com",
-  projectId: "masbah-14",
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
@@ -45,12 +45,13 @@ const db = firebase.database();
 let count = parseInt(localStorage.getItem('myCount')||'0');
 document.getElementById('count').innerText = count;
 
-function tasbeeh(){
-  count++;
+function tasbeeh(){ addCount(1); }
+function addCount(num){
+  count += num;
   if(count>=1000){count=0;}
   localStorage.setItem('myCount',count);
   document.getElementById('count').innerText=count;
-  db.ref('total').transaction(c=>(c||0)+1);
+  db.ref('total').transaction(c=>(c||0)+num);
 }
 function resetCounter(){
   count=0;
