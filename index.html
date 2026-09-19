@@ -3,80 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مسبحة 14 معصوم - مشتركة للجميع</title>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@800;900&display=swap" rel="stylesheet">
+<title>مسبحة 14 معصوم</title>
 <style>
-body{font-family:'Tajawal',sans-serif;background:#050e0b;color:#fff;margin:0;padding:12px}
-.ehdaa{background:linear-gradient(#1a3328,#0a1d16);border:2px solid #d4b26a;border-radius:20px;padding:20px;text-align:center;max-width:800px;margin:0 auto 14px;line-height:2.2}
-.ehdaa h1{color:#f9e08b;margin:0 0 8px;font-size:30px}
-.ehdaa p{margin:0;color:#f0e6c8;font-size:18px}
-#total{background:#10251e;border:1px solid #2a5a4a;padding:14px;border-radius:14px;font-weight:900;text-align:center;max-width:800px;margin:0 auto 14px;font-size:22px}
-.grid{display:grid;gap:14px;max-width:800px;margin:auto}
-.card{background:#112921;border:1px solid #234d3e;border-radius:18px;padding:18px;text-align:center}
-.num{font-size:52px;font-weight:900;margin:8px 0}
-.bar{height:12px;background:#020805;border-radius:10px;overflow:hidden}
-.fill{height:100%;background:linear-gradient(90deg,#c5a46a,#f9e08b);width:0%;transition:.4s}
-.btns{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
-.btns button{padding:13px 0;border:none;border-radius:12px;font-weight:900;font-size:17px;cursor:pointer}
-.b1{background:#fff}.b10{background:#c8e6c9}.b50{background:#81c784}.b100{background:#f9e08b;color:#3a2d00}
+body{background:#0a1f1a;color:white;font-family:Tahoma;text-align:center;padding:15px;margin:0}
+h1{color:#ffd700}
+.card{background:#132e26;border-radius:20px;padding:15px;margin:12px auto;max-width:420px;border:1px solid #1e4d3a}
+.count{font-size:50px;font-weight:bold;color:#ffd700;margin:8px}
+.fill{height:100%;background:linear-gradient(90deg,#ffd700,#ff9800);width:0%;transition:0.3s}
+.progress{height:10px;background:#0a1f1a;border-radius:10px;overflow:hidden;margin:10px 0}
+button{border:none;padding:10px 14px;margin:4px;border-radius:10px;font-weight:bold;cursor:pointer}
+.b1{background:#2e7d32;color:#fff}
+.b10{background:#0288d1;color:#fff}
+.b50{background:#ef6c00;color:#fff}
+.b100{background:#c62828;color:#fff}
+small{color:#8fbf9f}
 </style>
 </head>
 <body>
-<div class="ehdaa">
-<h1>اللهم صل على محمد وآل محمد</h1>
-<p>إهداء ثواب هذه الصلوات إلى<br>الأنبياء والمرسلين والأولياء والصالحين<br>والمؤمنين والمؤمنات والمسلمين والمسلمات<br><b>الأحياء منهم والأموات من الأولين والآخرين</b></p>
-</div>
-<div id="total">العداد المشترك للجميع: جاري التحميل...</div>
-<div class="grid" id="grid"></div>
+<h1>📿 مسبحة 14 معصوم</h1>
+<div id="box"></div>
 <script>
-const NS = "masbaha-14-maasum-moshtarak-final-umran";
-const BASE = `https://api.counterapi.dev/v1/${NS}`;
-const list = [
-{id:"nabi", name:"النبي محمد ﷺ"},
-{id:"ali", name:"الإمام علي عليه السلام"},
-{id:"fatima", name:"فاطمة الزهراء عليها السلام"},
-{id:"hasan", name:"الإمام الحسن عليه السلام"},
-{id:"hussein", name:"الإمام الحسين عليه السلام"},
-{id:"sajjad", name:"الإمام السجاد عليه السلام"},
-{id:"baqer", name:"الإمام الباقر عليه السلام"},
-{id:"sadeq", name:"الإمام الصادق عليه السلام"},
-{id:"kadhim", name:"الإمام الكاظم عليه السلام"},
-{id:"redha", name:"الإمام الرضا عليه السلام"},
-{id:"jawad", name:"الإمام الجواد عليه السلام"},
-{id:"hadi", name:"الإمام الهادي عليه السلام"},
-{id:"askari", name:"الإمام العسكري عليه السلام"},
-{id:"mahdi", name:"الإمام المهدي عجل الله فرجه"}
-];
-const grid=document.getElementById('grid');
-list.forEach(o=>{
- grid.innerHTML+=`<div class="card"><h2>${o.name}</h2><div style="font-size:12px;color:#8abfae">1000 صلاة - يتصفر تلقائي</div><div class="num" id="n-${o.id}">0</div><div class="bar"><div class="fill" id="f-${o.id}"></div></div><div class="btns"><button class="b1" onclick="addT('${o.id}',1)">+1</button><button class="b10" onclick="addT('${o.id}',10)">+10</button><button class="b50" onclick="addT('${o.id}',50)">+50</button><button class="b100" onclick="addT('${o.id}',100)">+100</button></div></div>`;
+const NS="masbah-14-final-2026";
+const names=["النبي محمد ﷺ","الإمام علي عليه السلام","فاطمة الزهراء عليها السلام","الإمام الحسن عليه السلام","الإمام الحسين عليه السلام","الإمام السجاد عليه السلام","الإمام الباقر عليه السلام","الإمام الصادق عليه السلام","الإمام الكاظم عليه السلام","الإمام الرضا عليه السلام","الإمام الجواد عليه السلام","الإمام الهادي عليه السلام","الإمام العسكري عليه السلام","الإمام المهدي عجل الله فرجه"];
+const box=document.getElementById("box");
+names.forEach((n,i)=>{
+box.innerHTML+=`<div class="card"><h2>${n}</h2><small>1000 صلاة - يصفر تلقائيا</small><div class="count" id="c${i}">...</div><div class="progress"><div class="fill" id="f${i}"></div></div><div><button class="b1" onclick="add(${i},1)">+1</button><button class="b10" onclick="add(${i},10)">+10</button><button class="b50" onclick="add(${i},50)">+50</button><button class="b100" onclick="add(${i},100)">+100</button></div></div>`;
 });
-async function load(id){
- try{let r=await fetch(`${BASE}/${id}/`);let d=await r.json();return d.count||0;}catch{return 0;}
-}
-async function addT(id,val){
- let cur=await load(id);
- let next=cur+val;
- if(next>=1000){
-   await fetch(`${BASE}/${id}/set?count=0`);
-   alert('تم إكمال 1000 صلاة - اللهم تقبل');
- }else{
-   await fetch(`${BASE}/${id}/up?count=${val}`);
- }
- refresh();
-}
-async function refresh(){
- let total=0;
- for(let o of list){
-   let v=await load(o.id);
-   if(v>=1000){await fetch(`${BASE}/${o.id}/set?count=0`); v=0;}
-   document.getElementById('n-'+o.id).innerText=v;
-   document.getElementById('f-'+o.id).style.width=(v/10)+'%';
-   total+=v;
- }
- document.getElementById('total').innerText=`العداد المشترك للجميع: ${total} / 14000 - كل معصوم 1000`;
-}
-refresh();setInterval(refresh,4000);
+function ui(i,v){let m=v%1000;document.getElementById("c"+i).innerText=m;document.getElementById("f"+i).style.width=(m/10)+"%";}
+async function load(i){try{let r=await fetch(`https://abacus.jasoncameron.dev/get/${NS}/m${i}`);let d=await r.json();ui(i,d.value);}catch{ui(i,0)}}
+async function add(i,num){let e=document.getElementById("c"+i);let cur=parseInt(e.innerText)||0;ui(i,cur+num);for(let k=0;k<num;k++){fetch(`https://abacus.jasoncameron.dev/hit/${NS}/m${i}`).then(r=>r.json()).then(d=>{if(k==num-1)ui(i,d.value)})}}
+names.forEach((_,i)=>load(i));
 </script>
 </body>
 </html>
