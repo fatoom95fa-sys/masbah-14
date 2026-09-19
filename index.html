@@ -1,10 +1,42 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LIVE</title><style>body{background:#0e211b;color:#fff;font-family:Tahoma;text-align:center;padding:15px}h1{color:#ffd700}.card{background:#173025;border-radius:18px;padding:16px;margin:12px auto;max-width:420px;border:1px solid #2a5a44}.num{font-size:40px;color:#ffd700;font-weight:bold}.bar{height:10px;background:#0a1a15;border-radius:10px;overflow:hidden;margin:10px 0}.fill{height:100%;width:0%;background:linear-gradient(90deg,#ffd700,#ff9800)}.b{border:none;padding:10px 14px;margin:3px;border-radius:10px;font-weight:bold;color:#fff;cursor:pointer}.b1{background:#2e7d32}.b10{background:#0277bd}.b50{background:#ef6c00}.b100{background:#c62828}</style></head><body><h1>📿 مسبحة 14 - LIVE</h1><div id="box"></div><script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";import{getDatabase,ref,onValue,runTransaction}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>مسبحة 14 معصوم - LIVE</title>
+<style>
+body{background:linear-gradient(180deg,#0e211b,#142e26);color:#fff;font-family:Tahoma;text-align:center;padding:15px;margin:0}
+h1{color:#ffd700;margin:10px 0}.live{display:inline-block;background:#0a2e20;border:1px solid #00ff88;color:#00ff88;padding:5px 14px;border-radius:20px;font-size:13px;margin-bottom:10px}
+.ehda{background:#1a342a;border:1px solid #ffd700;border-radius:14px;padding:12px;margin:12px auto;max-width:420px;font-size:14px;line-height:1.7}
+.card{background:#173025;border-radius:20px;padding:18px;margin:14px auto;max-width:420px;border:1px solid #2a5a44;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.name{font-size:17px;font-weight:bold}.num{font-size:42px;color:#ffd700;font-weight:bold;margin:6px 0}
+.bar{height:12px;background:#0a1a15;border-radius:10px;overflow:hidden;margin:10px 0}.fill{height:100%;width:0%;background:linear-gradient(90deg,#ffd700,#ff9800);transition:.3s}
+button{border:none;padding:10px 15px;margin:4px;border-radius:12px;font-weight:bold;color:#fff;cursor:pointer;font-size:14px}
+.b1{background:#2e7d32}.b10{background:#0277bd}.b50{background:#ef6c00}.b100{background:#c62828}.bm{background:#444}
+</style>
+</head>
+<body>
+<h1>📿 مسبحة 14 معصوم 📿</h1>
+<div class="live">● LIVE مشتركة لحظياً - كل من يسبح يظهر عند الجميع</div>
+
+<div class="ehda">
+🕊️ <b>الإهداء</b><br>
+نهدي ثواب هذه الأذكار إلى أرواح المؤمنين والمؤمنات<br>
+وإلى 14 معصوم عليهم السلام<br>
+اللهم تقبل منا هذا القليل
+</div>
+
+<div id="box"></div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getDatabase,ref,onValue,runTransaction} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 const cfg={apiKey:"AIzaSyBU7GePUjvUP2R_nOPeVTYH4wL1MgRqWL4",authDomain:"masbah-14.firebaseapp.com",databaseURL:"https://masbah-14-default-rtdb.firebaseio.com",projectId:"masbah-14",storageBucket:"masbah-14.firebasestorage.app",messagingSenderId:"954224768477",appId:"1:954224768477:web:2b9f68b6db7845bbb6e674"};
 const db=getDatabase(initializeApp(cfg));
-const names=["محمد صل الله عليه واله وسلم","علي","الزهراء","الحسن","الحسين","السجاد","الباقر","الصادق","الكاظم","الرضا","الجواد","الهادي","العسكري","المهدي"];
+const names=["النبي محمد صلى الله عليه وآله وسلم","الإمام علي عليه السلام","فاطمة الزهراء عليها السلام","الإمام الحسن عليه السلام","الإمام الحسين عليه السلام","الإمام السجاد عليه السلام","الإمام الباقر عليه السلام","الإمام الصادق عليه السلام","الإمام الكاظم عليه السلام","الإمام الرضا عليه السلام","الإمام الجواد عليه السلام","الإمام الهادي عليه السلام","الإمام العسكري عليه السلام","الإمام المهدي عجل الله فرجه الشريف"];
 const box=document.getElementById("box");
-names.forEach((n,i)=>{box.innerHTML+=`<div class="card"><div>${n}</div><div class="num" id="c${i}">--</div><div class="bar"><div class="fill" id="f${i}"></div></div><button class="b b1" onclick="add(${i},1)">+1</button><button class="b b10" onclick="add(${i},10)">+10</button><button class="b b50" onclick="add(${i},50)">+50</button><button class="b b100" onclick="add(${i},100)">+100</button></div>`;});
-window.add=(i,n)=>{runTransaction(ref(db,'masoom_global/m'+i),c=>(c||0)+n);};
+names.forEach((n,i)=>{box.innerHTML+=`<div class="card"><div class="name">${n}</div><div class="num" id="c${i}">--</div><div class="bar"><div class="fill" id="f${i}"></div></div><div><button class="b1" onclick="add(${i},1)">+1</button><button class="b10" onclick="add(${i},10)">+10</button><button class="b50" onclick="add(${i},50)">+50</button><button class="b100" onclick="add(${i},100)">+100</button><br><button class="bm" onclick="add(${i},-1)">-1</button></div></div>`;});
+window.add=(i,n)=>{runTransaction(ref(db,'masoom_global/m'+i),c=>{let v=(c||0)+n;return v<0?0:v}); if(navigator.vibrate) navigator.vibrate(30);};
 names.forEach((_,i)=>{onValue(ref(db,'masoom_global/m'+i),s=>{let v=s.val()||0;document.getElementById('c'+i).textContent=v;document.getElementById('f'+i).style.width=(v%1000/10)+'%';});});
-</script></body></html>
+</script>
+</body>
+</html>
