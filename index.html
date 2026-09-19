@@ -11,14 +11,11 @@ h1{color:#ffde59;font-size:32px;margin:10px 0}
 .live{border:1px solid #2ecc71;color:#2ecc71;border-radius:25px;padding:7px 18px;display:inline-block;font-size:14px;margin-bottom:18px}
 .card{background:#1c3526;border:1.5px solid #d4b44a;border-radius:18px;padding:18px;margin:14px auto;max-width:480px}
 .ehdaa-text{font-size:15px;line-height:1.9}
-.totals{margin-top:14px;border-top:1px dashed #d4b44a55;padding-top:12px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.tBox{background:#0f251a;border:1px solid #ffde59aa;border-radius:12px;padding:10px 12px;flex:1;min-width:130px}
-.tNum{font-size:20px;color:#ffde59;font-weight:700}
-.tBar{height:8px;background:#00000055;border-radius:10px;margin:6px 0;overflow:hidden}
-.tBar span{display:block;height:100%;background:#ffde59;transition:0.3s}
-.name{font-size:18px;margin-bottom:4px}
-.sub{font-size:13px;color:#aaa;margin-bottom:8px}
-.count{font-size:44px;color:#ffde59;font-weight:700;margin:6px 0}
+.totalBig{margin-top:14px;border-top:1px dashed #d4b44a55;padding-top:12px}
+.totalNum{font-size:30px;color:#ffde59;font-weight:700}
+.totalBar{height:12px;background:#00000055;border-radius:10px;margin:10px 0;overflow:hidden}
+.totalBar span{display:block;height:100%;background:#ffde59;transition:0.3s}
+.name{font-size:18px}.count{font-size:44px;color:#ffde59;font-weight:700;margin:6px 0}
 .progress{height:10px;background:#00000055;border-radius:10px;margin:12px 0;overflow:hidden}
 .progress span{display:block;height:100%;background:linear-gradient(90deg,#ffde59,#ffb700);transition:0.3s}
 .btns{display:flex;gap:10px;justify-content:center;margin-top:12px;flex-wrap:wrap}
@@ -28,25 +25,17 @@ h1{color:#ffde59;font-size:32px;margin:10px 0}
 </style>
 </head>
 <body>
-
 <h1>💞 مسبحة 14 معصوم 💞</h1>
 <div class="live">LIVE ● مشتركة لحظياً</div>
 
 <div class="card">
 <div>🕊️ الإهداء</div>
 <div class="ehdaa-text">نهدي ثواب هذه الأذكار إلى أرواح المؤمنين والمؤمنات<br>اللهم تقبل منا هذا القليل</div>
-
-<div class="totals">
-<div class="tBox">
-<div style="font-size:13px">مجموع الأئمة الـ 12</div>
-<div class="tNum"><span id="total12">0</span> / 12000</div>
-<div class="tBar"><span id="bar12" style="width:0%"></span></div>
-</div>
-<div class="tBox">
-<div style="font-size:13px">المجموع الكامل للـ 14</div>
-<div class="tNum"><span id="total14">0</span> / 14000</div>
-<div class="tBar"><span id="bar14" style="width:0%"></span></div>
-</div>
+<div class="totalBig">
+<div>المجموع الكلي</div>
+<div class="totalNum"><span id="totalAll">0</span> / 14000</div>
+<div class="totalBar"><span id="barAll" style="width:0%"></span></div>
+<div id="perAll" style="font-size:13px;color:#aaa">0%</div>
 </div>
 </div>
 
@@ -56,30 +45,13 @@ h1{color:#ffde59;font-size:32px;margin:10px 0}
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 <script>
 const names=["النبي محمد صلى الله عليه وآله وسلم","السيدة فاطمة الزهراء عليها السلام","الإمام علي عليه السلام","الإمام الحسن عليه السلام","الإمام الحسين عليه السلام","الإمام السجاد عليه السلام","الإمام الباقر عليه السلام","الإمام الصادق عليه السلام","الإمام الكاظم عليه السلام","الإمام الرضا عليه السلام","الإمام الجواد عليه السلام","الإمام الهادي عليه السلام","الإمام العسكري عليه السلام","الإمام المهدي عجل الله فرجه"];
-const firebaseConfig={databaseURL:"https://masbah-14-default-rtdb.firebaseio.com"};
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp({databaseURL:"https://masbah-14-default-rtdb.firebaseio.com"});
 const db=firebase.database();
-const list=document.getElementById('list');
-let h="";
-names.forEach((n,i)=>{h+=`<div class="card"><div class="name">${n}</div><div class="sub"><span id="t${i}">0</span> / 1000</div><div class="count" id="c${i}">0</div><div class="progress"><span id="p${i}" style="width:0%"></span></div><div class="btns"><button class="b100" onclick="add(${i},100)">+100</button><button class="b50" onclick="add(${i},50)">+50</button><button class="b10" onclick="add(${i},10)">+10</button><button class="b1" onclick="add(${i},1)">+1</button></div><button class="bminus" onclick="add(${i},-1)">-1</button></div>`;});
-list.innerHTML=h;
-function add(idx,num){db.ref('masbah/'+idx).transaction(c=>{let v=(c||0)+num;if(v<0)v=0;if(v>1000)v=1000;return v;});}
+let h=""; names.forEach((n,i)=>{h+=`<div class="card"><div class="name">${n}</div><div style="font-size:13px;color:#aaa"><span id="t${i}">0</span> / 1000</div><div class="count" id="c${i}">0</div><div class="progress"><span id="p${i}" style="width:0%"></span></div><div class="btns"><button class="b100" onclick="add(${i},100)">+100</button><button class="b50" onclick="add(${i},50)">+50</button><button class="b10" onclick="add(${i},10)">+10</button><button class="b1" onclick="add(${i},1)">+1</button></div><button class="bminus" onclick="add(${i},-1)">-1</button></div>`});
+document.getElementById('list').innerHTML=h;
+function add(i,n){db.ref('masbah/'+i).transaction(c=>{let v=(c||0)+n;if(v<0)v=0;if(v>1000)v=1000;return v;});}
 let all=new Array(14).fill(0);
-names.forEach((_,i)=>{
- db.ref('masbah/'+i).on('value',s=>{
-  let v=s.val()||0; all[i]=v;
-  document.getElementById('c'+i).innerText=v;
-  document.getElementById('t'+i).innerText=v;
-  document.getElementById('p'+i).style.width=(v/10)+"%";
-  // مجموع 12 إمام (من اندكس 2 الى 13)
-  let sum12=0; for(let k=2;k<14;k++) sum12+=all[k];
-  let sum14=all.reduce((a,b)=>a+b,0);
-  document.getElementById('total12').innerText=sum12;
-  document.getElementById('total14').innerText=sum14;
-  document.getElementById('bar12').style.width=(sum12/120)+"%";
-  document.getElementById('bar14').style.width=(sum14/140)+"%";
- });
-});
+names.forEach((_,i)=>{db.ref('masbah/'+i).on('value',s=>{let v=s.val()||0;all[i]=v;document.getElementById('c'+i).innerText=v;document.getElementById('t'+i).innerText=v;document.getElementById('p'+i).style.width=(v/10)+"%";let total=all.reduce((a,b)=>a+b,0);document.getElementById('totalAll').innerText=total;document.getElementById('barAll').style.width=(total/140)+"%";document.getElementById('perAll').innerText=Math.round(total/140)+"% مكتمل";});});
 </script>
 </body>
 </html>
