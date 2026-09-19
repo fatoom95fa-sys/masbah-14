@@ -8,14 +8,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700&display=swap');
 body{margin:0;padding:15px;background:#0f251a;color:#fff;font-family:'Tajawal',tahoma;text-align:center}
 h1{color:#ffde59;font-size:32px;margin:10px 0}
-.live{border:1px solid #2ecc71;color:#2ecc71;border-radius:25px;padding:7px 18px;display:inline-block;font-size:14px;margin:8px}
-.totalBox{background:#1c3526;border:1.5px solid #ffde59;border-radius:18px;padding:15px;margin:14px auto;max-width:480px}
-.totalNum{font-size:28px;color:#ffde59;font-weight:700}
-.totalBar{height:12px;background:#00000055;border-radius:10px;margin:10px 0;overflow:hidden}
-.totalBar span{display:block;height:100%;background:#ffde59;transition:0.3s}
+.live{border:1px solid #2ecc71;color:#2ecc71;border-radius:25px;padding:7px 18px;display:inline-block;font-size:14px;margin-bottom:18px}
 .card{background:#1c3526;border:1.5px solid #d4b44a;border-radius:18px;padding:18px;margin:14px auto;max-width:480px}
 .ehdaa-title{font-size:16px;margin-bottom:6px}
 .ehdaa-text{font-size:15px;line-height:1.9;color:#e6e6e6}
+.total-inside{margin-top:14px;border-top:1px dashed #d4b44a55;padding-top:12px}
+.totalNum{font-size:24px;color:#ffde59;font-weight:700}
+.totalBar{height:10px;background:#00000055;border-radius:10px;margin:8px 0;overflow:hidden}
+.totalBar span{display:block;height:100%;background:#ffde59;transition:0.3s}
 .name{font-size:18px;margin-bottom:4px}
 .sub{font-size:13px;color:#aaa;margin-bottom:8px}
 .count{font-size:44px;color:#ffde59;font-weight:700;margin:6px 0}
@@ -25,24 +25,23 @@ h1{color:#ffde59;font-size:32px;margin:10px 0}
 .btns button{border:none;border-radius:14px;padding:10px 22px;font-size:16px;font-weight:700;color:#fff;cursor:pointer}
 .b1{background:#2e8a4a}.b10{background:#1e8ecf}.b50{background:#f08a1a}.b100{background:#d13a2e}
 .bminus{background:#3a3a3a;padding:9px 30px!important;border-radius:14px;border:none;color:#fff;font-size:16px;margin-top:10px;cursor:pointer}
-.done{color:#2ecc71;font-size:14px;margin-top:6px;display:none}
 </style>
 </head>
 <body>
 
 <h1>💞 مسبحة 14 معصوم 💞</h1>
-<div class="live">LIVE ● مشتركة لحظياً</div>
+<div class="live">LIVE ● مشتركة لحظياً - كل من يسبح يظهر عند الجميع</div>
 
 <div class="card">
 <div class="ehdaa-title">🕊️ الإهداء</div>
 <div class="ehdaa-text">نهدي ثواب هذه الأذكار إلى أرواح المؤمنين والمؤمنات<br>اللهم تقبل منا هذا القليل</div>
-</div>
 
-<div class="totalBox">
-<div>المجموع الكلي للأئمة 14 معصوم</div>
+<div class="total-inside">
+<div style="font-size:15px">المجموع الكامل للأئمة الـ 14</div>
 <div class="totalNum"><span id="totalAll">0</span> / 14000</div>
 <div class="totalBar"><span id="totalBar" style="width:0%"></span></div>
-<div style="font-size:13px;color:#aaa" id="totalPercent">0%</div>
+<div style="font-size:12px;color:#aaa" id="totalPercent">0% مكتمل</div>
+</div>
 </div>
 
 <div id="list"></div>
@@ -50,72 +49,17 @@ h1{color:#ffde59;font-size:32px;margin:10px 0}
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 <script>
-const names=[
-"النبي محمد صلى الله عليه وآله وسلم",
-"السيدة فاطمة الزهراء عليها السلام",
-"الإمام علي عليه السلام",
-"الإمام الحسن عليه السلام",
-"الإمام الحسين عليه السلام",
-"الإمام السجاد عليه السلام",
-"الإمام الباقر عليه السلام",
-"الإمام الصادق عليه السلام",
-"الإمام الكاظم عليه السلام",
-"الإمام الرضا عليه السلام",
-"الإمام الجواد عليه السلام",
-"الإمام الهادي عليه السلام",
-"الإمام العسكري عليه السلام",
-"الإمام المهدي عجل الله فرجه"
-];
-
+const names=["النبي محمد صلى الله عليه وآله وسلم","السيدة فاطمة الزهراء عليها السلام","الإمام علي عليه السلام","الإمام الحسن عليه السلام","الإمام الحسين عليه السلام","الإمام السجاد عليه السلام","الإمام الباقر عليه السلام","الإمام الصادق عليه السلام","الإمام الكاظم عليه السلام","الإمام الرضا عليه السلام","الإمام الجواد عليه السلام","الإمام الهادي عليه السلام","الإمام العسكري عليه السلام","الإمام المهدي عجل الله فرجه"];
 const firebaseConfig={databaseURL:"https://masbah-14-default-rtdb.firebaseio.com"};
 firebase.initializeApp(firebaseConfig);
 const db=firebase.database();
-
 const list=document.getElementById('list');
 let h="";
-names.forEach((n,i)=>{
- h+=`<div class="card">
- <div class="name">${n}</div>
- <div class="sub"><span id="t${i}">0</span> / 1000</div>
- <div class="count" id="c${i}">0</div>
- <div class="progress"><span id="p${i}" style="width:0%"></span></div>
- <div class="done" id="d${i}">✓ اكتملت 1000</div>
- <div class="btns">
-  <button class="b100" onclick="add(${i},100)">+100</button>
-  <button class="b50" onclick="add(${i},50)">+50</button>
-  <button class="b10" onclick="add(${i},10)">+10</button>
-  <button class="b1" onclick="add(${i},1)">+1</button>
- </div>
- <button class="bminus" onclick="add(${i},-1)">-1</button>
- </div>`;
-});
+names.forEach((n,i)=>{h+=`<div class="card"><div class="name">${n}</div><div class="sub"><span id="t${i}">0</span> / 1000</div><div class="count" id="c${i}">0</div><div class="progress"><span id="p${i}" style="width:0%"></span></div><div class="btns"><button class="b100" onclick="add(${i},100)">+100</button><button class="b50" onclick="add(${i},50)">+50</button><button class="b10" onclick="add(${i},10)">+10</button><button class="b1" onclick="add(${i},1)">+1</button></div><button class="bminus" onclick="add(${i},-1)">-1</button></div>`;});
 list.innerHTML=h;
-
-function add(idx,num){
- db.ref('masbah/'+idx).transaction(c=>{
-  let v=(c||0)+num;
-  if(v<0)v=0;
-  if(v>1000)v=1000;
-  return v;
- });
-}
-
+function add(idx,num){db.ref('masbah/'+idx).transaction(c=>{let v=(c||0)+num;if(v<0)v=0;if(v>1000)v=1000;return v;});}
 let allCounts=new Array(14).fill(0);
-names.forEach((_,i)=>{
- db.ref('masbah/'+i).on('value',s=>{
-  let v=s.val()||0;
-  allCounts[i]=v;
-  document.getElementById('c'+i).innerText=v;
-  document.getElementById('t'+i).innerText=v;
-  document.getElementById('p'+i).style.width=(v/10)+"%";
-  document.getElementById('d'+i).style.display=v>=1000?"block":"none";
-
-  let total=allCounts.reduce((a,b)=>a+b,0);
-  document.getElementById('totalAll').innerText=total;
-  document.getElementById('totalBar').style.width=(total/140)+"%";
-  document.getElementById('totalPercent').innerText=Math.round(total/140)+"% مكتمل";
- });
-});
+names.forEach((_,i)=>{db.ref('masbah/'+i).on('value',s=>{let v=s.val()||0;allCounts[i]=v;document.getElementById('c'+i).innerText=v;document.getElementById('t'+i).innerText=v;document.getElementById('p'+i).style.width=(v/10)+"%";let total=allCounts.reduce((a,b)=>a+b,0);document.getElementById('totalAll').innerText=total;document.getElementById('totalBar').style.width=(total/140)+"%";document.getElementById('totalPercent').innerText=Math.round(total/140)+"% مكتمل";});});
 </script>
 </body>
 </html>
