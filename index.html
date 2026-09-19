@@ -1,72 +1,10 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مسبحة 14 معصوم</title>
-<style>
-body{background:#0e211b;color:#fff;font-family:Tahoma;text-align:center;padding:15px;margin:0}
-h1{color:#ffd700}
-.card{background:#173025;border-radius:18px;padding:16px;margin:12px auto;max-width:420px;border:1px solid #2a5a44}
-.num{font-size:38px;font-weight:bold;color:#ffd700}
-.num small{font-size:18px;color:#9ac9a9}
-.bar{height:12px;background:#0a1a15;border-radius:10px;overflow:hidden;margin:10px 0}
-.fill{height:100%;width:0%;background:linear-gradient(90deg,gold,orange);transition:.3s}
-button{border:none;padding:10px 12px;margin:3px;border-radius:10px;font-weight:bold;color:#fff;cursor:pointer}
-.b1{background:#2e7d32}.b10{background:#0277bd}.b50{background:#ef6c00}.b100{background:#c62828}
-.minus{background:#444;border:1px solid #777}
-</style>
-</head>
-<body>
-<h1>📿 مسبحة 14 معصوم</h1>
-<div id="box"></div>
-<script>
-const NS="masbah14-V11-FINAL-NAME";
-const names=["النبي صلى الله عليه وآله وسلم","الإمام علي عليه السلام","فاطمة الزهراء عليها السلام","الإمام الحسن عليه السلام","الإمام الحسين عليه السلام","الإمام السجاد عليه السلام","الإمام الباقر عليه السلام","الإمام الصادق عليه السلام","الإمام الكاظم عليه السلام","الإمام الرضا عليه السلام","الإمام الجواد عليه السلام","الإمام الهادي عليه السلام","الإمام العسكري عليه السلام","الإمام المهدي عجل الله فرجه"];
-let vals=Array(14).fill(0);
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LIVE</title><style>body{background:#0e211b;color:#fff;font-family:Tahoma;text-align:center;padding:15px}h1{color:#ffd700}.card{background:#173025;border-radius:18px;padding:16px;margin:12px auto;max-width:420px;border:1px solid #2a5a44}.num{font-size:40px;color:#ffd700;font-weight:bold}.bar{height:10px;background:#0a1a15;border-radius:10px;overflow:hidden;margin:10px 0}.fill{height:100%;width:0%;background:linear-gradient(90deg,#ffd700,#ff9800)}.b{border:none;padding:10px 14px;margin:3px;border-radius:10px;font-weight:bold;color:#fff;cursor:pointer}.b1{background:#2e7d32}.b10{background:#0277bd}.b50{background:#ef6c00}.b100{background:#c62828}</style></head><body><h1>📿 مسبحة 14 - LIVE</h1><div id="box"></div><script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";import{getDatabase,ref,onValue,runTransaction}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+const cfg={apiKey:"AIzaSyBU7GePUjvUP2R_nOPeVTYH4wL1MgRqWL4",authDomain:"masbah-14.firebaseapp.com",databaseURL:"https://masbah-14-default-rtdb.firebaseio.com",projectId:"masbah-14",storageBucket:"masbah-14.firebasestorage.app",messagingSenderId:"954224768477",appId:"1:954224768477:web:2b9f68b6db7845bbb6e674"};
+const db=getDatabase(initializeApp(cfg));
+const names=["محمد صل الله عليه واله وسلم","علي","الزهراء","الحسن","الحسين","السجاد","الباقر","الصادق","الكاظم","الرضا","الجواد","الهادي","العسكري","المهدي"];
 const box=document.getElementById("box");
-names.forEach((n,i)=>{
- box.innerHTML+=`
- <div class="card">
-  <div>${n}</div>
-  <div class="num" id="c${i}">0 <small>/ 1000</small></div>
-  <div class="bar"><div class="fill" id="f${i}"></div></div>
-  <div>
-   <button class="b1" onclick="add(${i},1)">+1</button>
-   <button class="b10" onclick="add(${i},10)">+10</button>
-   <button class="b50" onclick="add(${i},50)">+50</button>
-   <button class="b100" onclick="add(${i},100)">+100</button>
-  </div>
-  <div style="margin-top:8px">
-   <button class="minus" onclick="add(${i},-1)">-1 نقص</button>
-   <button class="minus" onclick="add(${i},-10)">-10 نقص</button>
-  </div>
- </div>`;
-});
-function render(i){
- if(vals[i]<0) vals[i]=0;
- let m=vals[i]%1000;
- document.getElementById("c"+i).innerHTML=m+" <small>/ 1000</small>";
- document.getElementById("f"+i).style.width=(m/10)+"%";
-}
-async function load(i){
- try{
-  let r=await fetch("https://abacus.jasoncameron.dev/get/"+NS+"/m"+i);
-  let d=await r.json();
-  if(d.value!=null) vals[i]=Number(d.value);
-  render(i);
- }catch{ render(i); }
-}
-function add(i,n){
- vals[i]+=n;
- render(i);
- if(n>0){
-  for(let k=0;k<n;k++){ fetch("https://abacus.jasoncameron.dev/hit/"+NS+"/m"+i); }
- }else{
-  fetch("https://abacus.jasoncameron.dev/set/"+NS+"/m"+i+"?value="+vals[i]);
- }
-}
-names.forEach((_,i)=>load(i));
-</script>
-</body>
-</html>
+names.forEach((n,i)=>{box.innerHTML+=`<div class="card"><div>${n}</div><div class="num" id="c${i}">--</div><div class="bar"><div class="fill" id="f${i}"></div></div><button class="b b1" onclick="add(${i},1)">+1</button><button class="b b10" onclick="add(${i},10)">+10</button><button class="b b50" onclick="add(${i},50)">+50</button><button class="b b100" onclick="add(${i},100)">+100</button></div>`;});
+window.add=(i,n)=>{runTransaction(ref(db,'masoom_global/m'+i),c=>(c||0)+n);};
+names.forEach((_,i)=>{onValue(ref(db,'masoom_global/m'+i),s=>{let v=s.val()||0;document.getElementById('c'+i).textContent=v;document.getElementById('f'+i).style.width=(v%1000/10)+'%';});});
+</script></body></html>
