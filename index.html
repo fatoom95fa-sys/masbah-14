@@ -10,40 +10,60 @@ h1{color:#ffd700}
 .card{background:#173025;border-radius:18px;padding:16px;margin:12px auto;max-width:420px;border:1px solid #2a5a44}
 .num{font-size:38px;font-weight:bold;color:#ffd700}
 .num small{font-size:18px;color:#9ac9a9}
-.bar{height:10px;background:#0a1a15;border-radius:10px;overflow:hidden;margin:10px 0}
-.fill{height:100%;width:0%;background:linear-gradient(90deg,#ffd700,#ff9800);transition:.3s}
-button{border:none;padding:9px 12px;margin:3px;border-radius:10px;font-weight:bold;color:#fff;cursor:pointer;font-size:14px}
+.bar{height:12px;background:#0a1a15;border-radius:10px;overflow:hidden;margin:10px 0}
+.fill{height:100%;width:0%;background:linear-gradient(90deg,gold,orange);transition:.3s}
+button{border:none;padding:10px 12px;margin:3px;border-radius:10px;font-weight:bold;color:#fff;cursor:pointer}
 .b1{background:#2e7d32}.b10{background:#0277bd}.b50{background:#ef6c00}.b100{background:#c62828}
-.bm{background:#444}.bm10{background:#222}
+.minus{background:#444;border:1px solid #777}
 </style>
 </head>
 <body>
 <h1>📿 مسبحة 14 معصوم</h1>
 <div id="box"></div>
 <script>
-const NS="masbah14-with-minus-V8";
-const names=["النبي محمد ﷺ","الإمام علي عليه السلام","فاطمة الزهراء عليها السلام","الإمام الحسن عليه السلام","الإمام الحسين عليه السلام","الإمام السجاد عليه السلام","الإمام الباقر عليه السلام","الإمام الصادق عليه السلام","الإمام الكاظم عليه السلام","الإمام الرضا عليه السلام","الإمام الجواد عليه السلام","الإمام الهادي عليه السلام","الإمام العسكري عليه السلام","الإمام المهدي عجل الله فرجه"];
+const NS="masbah14-V10-MINUS-FINAL";
+const names=["النبي محمد ﷺ","الامام علي عليه السلام","فاطمة الزهراء عليها السلام","الامام الحسن عليه السلام","الامام الحسين عليه السلام","الامام السجاد عليه السلام","الامام الباقر عليه السلام","الامام الصادق عليه السلام","الامام الكاظم عليه السلام","الامام الرضا عليه السلام","الامام الجواد عليه السلام","الامام الهادي عليه السلام","الامام العسكري عليه السلام","الامام المهدي عجل الله فرجه"];
 let vals=Array(14).fill(0);
 const box=document.getElementById("box");
 names.forEach((n,i)=>{
- box.innerHTML+=`<div class="card"><div>${n}</div><div class="num" id="c${i}">0 <small>/ 1000</small></div><div class="bar"><div class="fill" id="f${i}"></div></div><div><button class="b1" onclick="add(${i},1)">+1</button><button class="b10" onclick="add(${i},10)">+10</button><button class="b50" onclick="add(${i},50)">+50</button><button class="b100" onclick="add(${i},100)">+100</button><br><button class="bm" onclick="add(${i},-1)">-1</button><button class="bm10" onclick="add(${i},-10)">-10 تراجع</button></div></div>`;
+ box.innerHTML+=`
+ <div class="card">
+  <div>${n}</div>
+  <div class="num" id="c${i}">0 <small>/ 1000</small></div>
+  <div class="bar"><div class="fill" id="f${i}"></div></div>
+  <div>
+   <button class="b1" onclick="add(${i},1)">+1</button>
+   <button class="b10" onclick="add(${i},10)">+10</button>
+   <button class="b50" onclick="add(${i},50)">+50</button>
+   <button class="b100" onclick="add(${i},100)">+100</button>
+  </div>
+  <div style="margin-top:8px">
+   <button class="minus" onclick="add(${i},-1)">-1 نقص</button>
+   <button class="minus" onclick="add(${i},-10)">-10 نقص</button>
+  </div>
+ </div>`;
 });
 function render(i){
- let v=vals[i]; if(v<0) v=0; vals[i]=v;
- let m=v%1000;
- document.getElementById(`c${i}`).innerHTML=`${m} <small>/ 1000</small>`;
- document.getElementById(`f${i}`).style.width=(m/10)+"%";
+ if(vals[i]<0) vals[i]=0;
+ let m=vals[i]%1000;
+ document.getElementById("c"+i).innerHTML=m+" <small>/ 1000</small>";
+ document.getElementById("f"+i).style.width=(m/10)+"%";
 }
-async function load(i){ try{ let r=await fetch(`https://abacus.jasoncameron.dev/get/${NS}/m${i}`); let d=await r.json(); if(d.value!=null) vals[i]=Number(d.value); render(i);}catch{} }
-async function add(i,n){
- vals[i]+=n; if(vals[i]<0) vals[i]=0;
+async function load(i){
+ try{
+  let r=await fetch("https://abacus.jasoncameron.dev/get/"+NS+"/m"+i);
+  let d=await r.json();
+  if(d.value!=null) vals[i]=Number(d.value);
+  render(i);
+ }catch{ render(i); }
+}
+function add(i,n){
+ vals[i]+=n;
  render(i);
- // نحدث السيرفر
  if(n>0){
-  for(let k=0;k<n;k++) fetch(`https://abacus.jasoncameron.dev/hit/${NS}/m${i}`);
+  for(let k=0;k<n;k++){ fetch("https://abacus.jasoncameron.dev/hit/"+NS+"/m"+i); }
  }else{
-  // سالب : نثبت القيمة الجديدة في السيرفر
-  fetch(`https://abacus.jasoncameron.dev/set/${NS}/m${i}?value=${vals[i]}`);
+  fetch("https://abacus.jasoncameron.dev/set/"+NS+"/m"+i+"?value="+vals[i]);
  }
 }
 names.forEach((_,i)=>load(i));
