@@ -5,48 +5,45 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>مسبحة 14 معصوم</title>
 <style>
-body{background:#081a15;color:white;font-family:Tahoma;text-align:center;padding:15px;margin:0}
-h1{color:#ffd700;margin:20px 0}
-.card{background:#132e26;border-radius:18px;padding:16px;margin:12px auto;max-width:400px;border:1px solid #204e3a}
-.count{font-size:34px;font-weight:bold;color:#ffd700;margin:10px}
-.count span{color:#a8d5b5;font-size:18px;font-weight:normal}
-.progress{height:12px;background:#081a15;border-radius:10px;overflow:hidden;margin:12px 0}
-.fill{height:100%;background:linear-gradient(90deg,#ffd700,#ff9800);width:0%;transition:0.4s}
-button{border:none;padding:10px 14px;margin:4px;border-radius:10px;font-weight:bold;cursor:pointer}
-.b1{background:#2e7d32;color:#fff}
-.b10{background:#0288d1;color:#fff}
-.b50{background:#ef6c00;color:#fff}
-.b100{background:#c62828;color:#fff}
-h2{font-size:16px;margin:4px}
+body{background:#0e211b;color:#fff;font-family:Tahoma;text-align:center;padding:15px;margin:0}
+h1{color:#ffd700}
+.card{background:#173025;border-radius:18px;padding:16px;margin:12px auto;max-width:400px;border:1px solid #2a5a44}
+.num{font-size:38px;font-weight:bold;color:#ffd700}
+.num small{font-size:18px;color:#9ac9a9}
+.bar{height:10px;background:#0a1a15;border-radius:10px;overflow:hidden;margin:10px 0}
+.fill{height:100%;width:0%;background:linear-gradient(90deg,#ffd700,#ff9800);transition:.3s}
+button{border:none;padding:10px 14px;margin:3px;border-radius:10px;font-weight:bold;color:#fff}
+.b1{background:#2e7d32}.b10{background:#0277bd}.b50{background:#ef6c00}.b100{background:#c62828}
 </style>
 </head>
 <body>
 <h1>📿 مسبحة 14 معصوم</h1>
 <div id="box"></div>
 <script>
-const NS="masbah-14-clean-v5";
+const NS="masbah14-100-final-NaN-FIX";
 const names=["النبي محمد ﷺ","الإمام علي عليه السلام","فاطمة الزهراء عليها السلام","الإمام الحسن عليه السلام","الإمام الحسين عليه السلام","الإمام السجاد عليه السلام","الإمام الباقر عليه السلام","الإمام الصادق عليه السلام","الإمام الكاظم عليه السلام","الإمام الرضا عليه السلام","الإمام الجواد عليه السلام","الإمام الهادي عليه السلام","الإمام العسكري عليه السلام","الإمام المهدي عجل الله فرجه"];
+let vals=[0,0,0,0,0,0];
 const box=document.getElementById("box");
 names.forEach((n,i)=>{
- box.innerHTML+=`<div class="card"><h2>${n}</h2><div class="count" id="c${i}">0 <span>/ 1000</span></div><div class="progress"><div class="fill" id="f${i}"></div></div><div><button class="b1" onclick="add(${i},1)">+1</button><button class="b10" onclick="add(${i},10)">+10</button><button class="b50" onclick="add(${i},50)">+50</button><button class="b100" onclick="add(${i},100)">+100</button></div></div>`;
+ box.innerHTML+=`<div class="card"><div>${n}</div><div class="num" id="c${i}">0 <small>/ 1000</small></div><div class="bar"><div class="fill" id="f${i}"></div></div><div><button class="b1" onclick="add(${i},1)">+1</button><button class="b10" onclick="add(${i},10)">+10</button><button class="b50" onclick="add(${i},50)">+50</button><button class="b100" onclick="add(${i},100)">+100</button></div></div>`;
 });
-function ui(i,v){
- if(!v&&v!==0) v=0;
- let m = Number(v)%1000;
- document.getElementById("c"+i).innerHTML=`${m} <span>/ 1000</span>`;
- document.getElementById("f"+i).style.width=(m/10)+"%";
+function render(i){
+ let m = vals[i] % 1000;
+ document.getElementById(`c${i}`).innerHTML=`${m} <small>/ 1000</small>`;
+ document.getElementById(`f${i}`).style.width=(m/10)+"%";
 }
 async function load(i){
  try{
   let r=await fetch(`https://abacus.jasoncameron.dev/get/${NS}/m${i}`);
   let d=await r.json();
-  ui(i,d.value||0);
- }catch{ ui(i,0); }
+  vals[i]=Number(d.value)||0;
+  render(i);
+ }catch{ render(i); }
 }
-function add(i,num){
- let cur = parseInt(document.getElementById("c"+i).innerText)||0;
- ui(i,cur+num);
- fetch(`https://abacus.jasoncameron.dev/hit/${NS}/m${i}?by=${num}`).then(r=>r.json()).then(d=>ui(i,d.value));
+function add(i,n){
+ vals[i]+=n;
+ render(i);
+ fetch(`https://abacus.jasoncameron.dev/hit/${NS}/m${i}?by=${n}`).then(r=>r.json()).then(d=>{vals[i]=Number(d.value)||vals[i];render(i);});
 }
 names.forEach((_,i)=>load(i));
 </script>
