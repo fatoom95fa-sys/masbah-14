@@ -5,97 +5,98 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>مسبحة 14 معصوم</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@700;800&display=swap');
-*{box-sizing:border-box}
-body{margin:0;padding:15px;background:#0f251a;color:#fff;font-family:'Tajawal',tahoma;text-align:center}
-h1{color:#ffde59;font-size:28px}
-.live{border:1px solid #2ecc71;color:#2ecc71;border-radius:25px;padding:6px 16px;display:inline-block;font-size:13px;margin-bottom:12px}
-.myBar{background:linear-gradient(90deg,#d4b44a,#ffde59);color:#0f251a;border-radius:20px;padding:10px 18px;display:flex;justify-content:space-between;font-weight:800;max-width:500px;margin:0 auto 14px}
-.card{background:#1c3526;border:1.5px solid #d4b44a;border-radius:18px;padding:18px;margin:14px auto;max-width:500px}
-.count{font-size:50px;color:#ffde59;font-weight:800}
-.progress{height:10px;background:#00000055;border-radius:10px;margin:10px 0;overflow:hidden}
-.progress span{display:block;height:100%;background:#ffde59;transition:width.3s}
-.khatma{color:#2ecc71;font-size:14px;font-weight:800;margin-top:6px;background:#00000040;border-radius:10px;padding:6px}
-.totalNum{font-size:30px;color:#ffde59;font-weight:800}
-.totalBar{height:12px;background:#00000055;border-radius:10px;margin:10px 0;overflow:hidden}
-.totalBar span{display:block;height:100%;background:#ffde59;transition:width.3s}
-.btnPlus{background:#2e8a4a;border:none;border-radius:14px;padding:16px;width:100%;max-width:280px;font-size:22px;font-weight:800;color:#fff;cursor:pointer}
+body{background:#121f12;color:#fff;font-family:Tajawal,system-ui;text-align:center;margin:0;padding:12px}
+.top{background:#c8a94a;color:#000;border-radius:20px;padding:10px 16px;display:flex;justify-content:space-between;font-weight:bold;font-size:14px;margin-bottom:12px}
+.card{background:#1d341d;border:1px solid #2f552f;border-radius:22px;padding:16px;margin-bottom:14px}
+.total-num{font-size:38px;color:#f7d25a;font-weight:900;direction:ltr;margin:6px 0}
+.progress{height:10px;background:#0e1e0e;border-radius:10px;overflow:hidden;margin-top:10px}
+.fill{height:100%;background:#f7d25a;width:0%;transition:.3s}
+.badge{background:#143214;color:#55d67c;border-radius:12px;padding:8px;font-weight:bold;font-size:14px;margin-top:10px;display:block}
+.btn{background:#2a7a2e;color:#fff;border:none;width:100%;padding:14px;border-radius:14px;font-size:20px;font-weight:bold;margin-top:12px}
+.small{font-size:12px;opacity:.8;line-height:1.7}
 </style>
 </head>
 <body>
-<h1>💞 مسبحة 14 معصوم 💞</h1>
-<div class="live">LIVE ● مشتركة لحظياً</div>
-<div class="myBar"><span>تسبيحك: <span id="myTotal">0</span></span><span>جلستك: <span id="mySession">0</span></span></div>
+
+<div class="top">
+<span id="session">جلستك: 0</span>
+<span id="my">تسبيحك: 0</span>
+</div>
 
 <div class="card">
-<div style="color:#ffde59;font-weight:800">🕊️ الإهداء</div>
-<div style="font-size:14px;line-height:2">نهدي ثواب الصلاة على محمد وآل محمد إلى جميع الأنبياء والمرسلين والأولياء والصالحين والمؤمنين والمؤمنات والمسلمين والمسلمات الأحياء منهم والأموات من الأولين والآخرين</div>
-<div style="border-top:1px dashed #ffffff30;margin-top:12px;padding-top:10px">
-<div>المجموع الكلي</div>
-<div class="totalNum"><span id="totalAll">0</span> / 14000</div>
-<div class="totalBar"><span id="barAll" style="width:0%"></span></div>
-<div style="margin-top:8px;color:#2ecc71;font-weight:800" id="totalKhatma">مجموع الختمات: 0</div>
-</div>
+<div style="font-weight:bold;margin-bottom:6px">🕊️ الإهداء</div>
+<div class="small">نهدي ثواب الصلاة على محمد وآل محمد إلى جميع الأنبياء والمرسلين والأولياء والصالحين والمؤمنين والمؤمنات المسلمين والمسلمات الأحياء منهم والأموات من الأولين والآخرين</div>
+<hr style="border:0;border-top:1px dashed #2a4a2a;margin:12px 0">
+<div class="small">المجموع الكلي</div>
+<div class="total-num"><span id="total">0</span> / 14000</div>
+<div class="progress"><div id="totalFill" class="fill"></div></div>
+
+<!-- هذا هو اللي طلبتيه الجديد نفس اللي بالدائرة الخضراء بس للـ 14000 -->
+<div class="badge" id="bigBadge">✅ ختمات مكتملة: 0</div>
+<div style="color:#7ed67e;font-size:13px;margin-top:6px">مجموع الختمات: <span id="bigText">0 ختمة</span></div>
 </div>
 
 <div id="list"></div>
 
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 <script>
-const names=["النبي محمد صلى الله عليه وآله وسلم","الإمام علي عليه السلام","السيدة فاطمة الزهراء عليها السلام","الإمام الحسن عليه السلام","الإمام الحسين عليه السلام","الإمام السجاد عليه السلام","الإمام الباقر عليه السلام","الإمام الصادق عليه السلام","الإمام الكاظم عليه السلام","الإمام الرضا عليه السلام","الإمام الجواد عليه السلام","الإمام الهادي عليه السلام","الإمام العسكري عليه السلام","الإمام المهدي عجل الله فرجه"];
-firebase.initializeApp({databaseURL:"https://masbah-14-default-rtdb.firebaseio.com"});
-const db=firebase.database();
-let myTotal=parseInt(localStorage.getItem('myTotal')||'0');
-let mySession=parseInt(sessionStorage.getItem('mySession')||'0');
-let all=new Array(14).fill(0);
-let allKhatma=new Array(14).fill(0);
-function refreshMine(){document.getElementById('myTotal').innerText=myTotal;document.getElementById('mySession').innerText=mySession;}
-refreshMine();
-let h="";names.forEach((n,i)=>{h+=`<div class="card"><div style="font-size:17px;font-weight:700">${n}</div><div style="font-size:12px;color:#aaa"><span id="t${i}">0</span> / 1000</div><div class="count" id="c${i}">0</div><div class="progress"><span id="p${i}" style="width:0%"></span></div><div class="khatma" id="k${i}">✅ ختمات مكتملة: 0</div><div style="margin-top:14px"><button class="btnPlus" id="b${i}" onclick="add(${i})">+1 صلوات</button></div></div>`});
-document.getElementById('list').innerHTML=h;
+const NAMES=[
+"النبي محمد صلى الله عليه وآله وسلم",
+"الإمام علي عليه السلام",
+"فاطمة الزهراء عليها السلام",
+"الإمام الحسن عليه السلام",
+"الإمام الحسين عليه السلام",
+"الإمام السجاد عليه السلام",
+"الإمام الباقر عليه السلام",
+"الإمام الصادق عليه السلام",
+"الإمام الكاظم عليه السلام",
+"الإمام الرضا عليه السلام",
+"الإمام الجواد عليه السلام",
+"الإمام الهادي عليه السلام",
+"الإمام العسكري عليه السلام",
+"الإمام المهدي عجل الله فرجه"
+];
+const LIMIT=1000, TOTAL=14000;
+let data=JSON.parse(localStorage.getItem('tasbih14')||'{}');
+let big=parseInt(localStorage.getItem('bigKhatma14')||'0');
+let myCount=parseInt(localStorage.getItem('myCount')||'0');
+let sess=parseInt(localStorage.getItem('sess')||'0');
 
-function add(idx){
-  myTotal++;mySession++;
-  localStorage.setItem('myTotal',myTotal);
-  sessionStorage.setItem('mySession',mySession);
-  refreshMine();
-  if(navigator.vibrate) navigator.vibrate(40);
-  db.ref('masbah/'+idx).transaction(cur=>{
-    cur=cur||0;
-    if(cur>=1000) return 0;
-    return cur+1;
-  });
+function save(){localStorage.setItem('tasbih14',JSON.stringify(data));localStorage.setItem('bigKhatma14',big);localStorage.setItem('myCount',myCount);localStorage.setItem('sess',sess);render();}
+
+function render(){
+let total=0;let html='';
+NAMES.forEach((n,i)=>{
+let v=data[i]||0;total+=v;
+let k=parseInt(localStorage.getItem('k_'+i)||'0');
+let perc=Math.min(100,v/10);
+html+=`<div class="card"><div style="font-weight:bold">${n}</div><div class="small">${v} / 1000</div><div style="font-size:44px;color:#f7d25a;font-weight:900">${v}</div><div class="progress"><div class="fill" style="width:${perc}%"></div></div><div class="badge">✅ ختمات مكتملة: ${k}</div><button class="btn" onclick="add(${i})">+1 صلوات</button></div>`;
+});
+
+// إذا وصل 14000 يتصفر ويحسب ختمة كبيرة جديدة
+if(total>=TOTAL){
+big++;
+localStorage.setItem('bigKhatma14',big);
+alert('ما شاء الله 🎉 اكتملت ختمة الـ 14 ألف رقم '+big+'\nنبدأ ختمة جديدة الآن');
+NAMES.forEach((_,i)=>{data[i]=0;});
+total=0;
+localStorage.setItem('tasbih14',JSON.stringify(data));
 }
 
-names.forEach((_,i)=>{
-  db.ref('masbah/'+i).on('value',s=>{
-    let v=s.val()||0;
-    all[i]=v;
-    document.getElementById('c'+i).innerText=v;
-    document.getElementById('t'+i).innerText=v;
-    document.getElementById('p'+i).style.width=(v/10)+"%";
-    let total=all.reduce((a,b)=>a+b,0);
-    document.getElementById('totalAll').innerText=total;
-    document.getElementById('barAll').style.width=(total/140)+"%";
-    if(v>=1000){
-      document.getElementById('b'+i).innerText="تمت الختمة ✅";
-      setTimeout(()=>{
-        db.ref('masbah_khatma/'+i).transaction(k=>{return (k||0)+1;});
-        db.ref('masbah/'+i).set(0);
-      },1200);
-    }else{
-      document.getElementById('b'+i).innerText="+1 صلوات";
-    }
-  });
-  db.ref('masbah_khatma/'+i).on('value',s=>{
-    let k=s.val()||0;
-    allKhatma[i]=k;
-    document.getElementById('k'+i).innerText="✅ ختمات مكتملة: "+k;
-    let totalK=allKhatma.reduce((a,b)=>a+b,0);
-    document.getElementById('totalKhatma').innerText="مجموع الختمات: "+totalK+" ختمة";
-  });
-});
+document.getElementById('total').innerText=total;
+document.getElementById('totalFill').style.width=(total/TOTAL*100)+'%';
+document.getElementById('bigBadge').innerText='✅ ختمات مكتملة: '+big;
+document.getElementById('bigText').innerText=big+' ختمة';
+document.getElementById('my').innerText='تسبيحك: '+myCount;
+document.getElementById('session').innerText='جلستك: '+sess;
+document.getElementById('list').innerHTML=html;
+}
+
+function add(i){
+let v=data[i]||0;v++;myCount++;sess++;
+if(v>=LIMIT){let k=parseInt(localStorage.getItem('k_'+i)||'0')+1;localStorage.setItem('k_'+i,k);v=0;if(navigator.vibrate)navigator.vibrate(100);}
+data[i]=v;save();
+}
+render();
 </script>
 </body>
 </html>
