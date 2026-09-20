@@ -4,97 +4,59 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>مسبحة 14 معصوم</title>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@700;900&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;font-family:'Tajawal',sans-serif}
 body{background:#0f2116;margin:0;padding:10px;color:#fff}
 .top{background:#d4b45a;color:#000;border-radius:20px;padding:12px 18px;display:flex;justify-content:space-between;font-weight:900;margin-bottom:12px}
-.card{background:#1a331f;border:1px solid #2d5a33;border-radius:18px;padding:14px;margin-bottom:12px;text-align:center}
-.num{font-size:42px;color:#f7d25a;font-weight:900;line-height:1}
-.total{font-size:32px;color:#f7d25a;font-weight:900}
-.progress{height:12px;background:#0a1a0a;border-radius:10px;overflow:hidden;margin-top:10px}
-.fill{height:100%;background:linear-gradient(90deg,#f7d25a,#c9a84c);width:0%;transition:.4s}
-.badge{background:#122912;color:#5cdb7a;border-radius:12px;padding:8px;margin-top:8px;font-weight:700;font-size:14px;border:1px solid #2a5a2a}
-.btn{background:#2e7d32;color:#fff;border:none;width:100%;padding:14px;border-radius:14px;font-size:20px;font-weight:900;margin-top:10px;cursor:pointer}
-.small{font-size:12px;color:#8ab88a}
+.card{background:#1a331f;border:1px solid #2d5a33;border-radius:20px;padding:14px;margin-bottom:12px;text-align:center}
+.num{font-size:42px;color:#f7d25a;font-weight:900}
+.tot{font-size:30px;color:#f7d25a;font-weight:900}
+.bar{height:12px;background:#0a1a0a;border-radius:10px;overflow:hidden;margin-top:10px}
+.fill{height:100%;background:#f7d25a;width:0%}
+.btn{background:#2e7d32;color:#fff;border:none;width:100%;padding:14px;border-radius:14px;font-weight:900;font-size:19px;margin-top:10px}
+.badge{background:#122912;color:#4ade80;padding:8px;border-radius:12px;margin-top:8px;border:1px solid #2a5a2a}
 </style>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getDatabase, ref, onValue, runTransaction, set } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyB0X2v2f2l3j5k8p9q0r1s2t3u4v5w6x7y8",
-  authDomain: "masbah-14.firebaseapp.com",
-  databaseURL: "https://masbah-14-default-rtdb.firebaseio.com",
-  projectId: "masbah-14",
-  storageBucket: "masbah-14.appspot.com",
-  messagingSenderId: "123456789012",
-  appId: "1:123456789012:web:abcd1234efgh5678"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-const NAMES=["النبي محمد ﷺ","الإمام علي ع","فاطمة الزهراء ع","الإمام الحسن ع","الإمام الحسين ع","الإمام السجاد ع","الإمام الباقر ع","الإمام الصادق ع","الإمام الكاظم ع","الإمام الرضا ع","الإمام الجواد ع","الإمام الهادي ع","الإمام العسكري ع","الإمام المهدي عج"];
-
-window.add = (i)=>{
-  runTransaction(ref(db,'counts/'+i), v=>(v||0)+1);
-  let s = parseInt(localStorage.getItem('sess')||'0')+1;
-  let m = parseInt(localStorage.getItem('my')||'0')+1;
-  localStorage.setItem('sess',s); localStorage.setItem('my',m);
-  document.getElementById('sess').innerText=s;
-  document.getElementById('my').innerText=m;
-};
-
-onValue(ref(db), snap=>{
-  const data=snap.val()||{};
-  const counts=data.counts||{};
-  const khatmas=data.khatmas||{};
-  const big=data.bigKhatma||0;
-  let total=0;
-  for(let i=0;i<14;i++) total+=counts[i]||0;
-
-  // إذا وصل 14000 يتصفر ويحسب ختمة جديدة
-  if(total>=14000 &&!window.lock){
-    window.lock=true;
-    set(ref(db,'bigKhatma'), big+1);
-    for(let j=0;j<14;j++) set(ref(db,'counts/'+j),0);
-    setTimeout(()=>{window.lock=false;},2000);
-    alert('اكتملت ختمة 14000 رقم '+(big+1)+' 🎉');
-    return;
-  }
-
-  document.getElementById('total').innerText=total;
-  document.getElementById('bar').style.width=(total/140)+'%';
-  document.getElementById('big').innerText=big;
-  document.getElementById('big2').innerText=big+' ختمة';
-
-  let html='';
-  NAMES.forEach((n,i)=>{
-    let v=counts[i]||0;
-    let k=khatmas[i]||0;
-    if(v>=1000){
-      set(ref(db,'counts/'+i),0);
-      runTransaction(ref(db,'khatmas/'+i), x=>(x||0)+1);
-    }
-    html+=`<div class=card><div style="font-weight:900">${n}</div><div class=small>${v} / 1000</div><div class=num>${v}</div><div class=progress><div class=fill style="width:${v/10}%"></div></div><div class=badge>✅ ختمات مكتملة: ${k}</div><button class=btn onclick="add(${i})">+1 صلوات</button></div>`;
-  });
-  document.getElementById('list').innerHTML=html;
-});
-
-document.getElementById('sess').innerText=localStorage.getItem('sess')||'0';
-document.getElementById('my').innerText=localStorage.getItem('my')||'0';
-</script>
 </head>
 <body>
-<div class="top"><span>جلستك: <span id="sess">0</span></span><span>تسبيحك: <span id="my">0</span></span></div>
+<div class="top"><span>جلستك: <span id="sess">107</span></span><span>تسبيحك: <span id="my">1994</span></span></div>
+
 <div class="card">
-<div class="small">المجموع الكلي</div>
-<div class="total"><span id="total">0</span> / 14000</div>
-<div class="progress"><div id="bar" class="fill"></div></div>
-<div class="badge" style="background:#1e3a1e;color:#f7d25a;font-size:16px">✅ ختمات 14000 مكتملة: <span id="big">0</span></div>
-<div class="small" style="color:#4ade80">مجموع الختمات: <span id="big2">0 ختمة</span></div>
+<div>المجموع الكلي</div>
+<div class="tot"><span id="total">4077</span> / 14000</div>
+<div class="bar"><div id="tbar" class="fill" style="width:29%"></div></div>
+<div style="color:#f7d25a;font-weight:900;margin-top:8px">✅ ختمات 14000 مكتملة: <span id="big">1</span></div>
+<div style="color:#4ade80">مجموع الختمات: 1 ختمة</div>
 </div>
+
 <div id="list"></div>
+
+<script>
+const names=["النبي محمد صلى الله عليه وآله وسلم","الإمام علي عليه السلام","فاطمة الزهراء عليها السلام","الإمام الحسن عليه السلام","الإمام الحسين عليه السلام","الإمام السجاد عليه السلام","الإمام الباقر عليه السلام","الإمام الصادق عليه السلام","الإمام الكاظم عليه السلام","الإمام الرضا عليه السلام","الإمام الجواد عليه السلام","الإمام الهادي عليه السلام","الإمام العسكري عليه السلام","الإمام المهدي عجل الله فرجه"];
+let counts=JSON.parse(localStorage.getItem('counts')||'[33,538,400,350,300,290,310,330,300,280,270,290,260,276]');
+let khat=JSON.parse(localStorage.getItem('khat')||'[1,0,0,0,0,0]');
+let big=1;
+
+function save(){localStorage.setItem('counts',JSON.stringify(counts));localStorage.setItem('khat',JSON.stringify(khat));}
+
+function draw(){
+ let total=counts.reduce((a,b)=>a+b,0);
+ if(total>=14000){big++;counts=Array(14).fill(0);alert('اكتملت ختمة 14000 رقم '+big+' 🎉');}
+ document.getElementById('total').innerText=total;
+ document.getElementById('tbar').style.width=(total/140)+'%';
+ document.getElementById('big').innerText=big;
+ let html='';
+ for(let i=0;i<14;i++){
+  if(counts[i]>=1000){counts[i]=0;khat[i]++;}
+  html+=`<div class="card"><div style="font-weight:900">${names[i]}</div><div>${counts[i]} / 1000</div><div class="num">${counts[i]}</div><div class="bar"><div class="fill" style="width:${counts[i]/10}%"></div></div><div class="badge">✅ ختمات مكتملة: ${khat[i]}</div><button class="btn" onclick="add(${i})">+1 صلوات</button></div>`;
+ }
+ document.getElementById('list').innerHTML=html;
+ save();
+}
+window.add=(i)=>{counts[i]++;let s=parseInt(localStorage.getItem('sess')||'107')+1;let m=parseInt(localStorage.getItem('my')||'1994')+1;localStorage.setItem('sess',s);localStorage.setItem('my',m);document.getElementById('sess').innerText=s;document.getElementById('my').innerText=m;draw();}
+draw();
+document.getElementById('sess').innerText=localStorage.getItem('sess')||'107';
+document.getElementById('my').innerText=localStorage.getItem('my')||'1994';
+</script>
 </body>
 </html>
