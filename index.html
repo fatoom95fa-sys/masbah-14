@@ -4,59 +4,99 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>مسبحة 14 معصوم</title>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@700;900&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;font-family:'Tajawal',sans-serif}
-body{background:#0f2116;margin:0;padding:10px;color:#fff}
-.top{background:#d4b45a;color:#000;border-radius:20px;padding:12px 18px;display:flex;justify-content:space-between;font-weight:900;margin-bottom:12px}
-.card{background:#1a331f;border:1px solid #2d5a33;border-radius:20px;padding:14px;margin-bottom:12px;text-align:center}
-.num{font-size:42px;color:#f7d25a;font-weight:900}
-.tot{font-size:30px;color:#f7d25a;font-weight:900}
-.bar{height:12px;background:#0a1a0a;border-radius:10px;overflow:hidden;margin-top:10px}
-.fill{height:100%;background:#f7d25a;width:0%}
-.btn{background:#2e7d32;color:#fff;border:none;width:100%;padding:14px;border-radius:14px;font-weight:900;font-size:19px;margin-top:10px}
-.badge{background:#122912;color:#4ade80;padding:8px;border-radius:12px;margin-top:8px;border:1px solid #2a5a2a}
+body{background:#121f12;color:#fff;font-family:Tajawal,system-ui;text-align:center;margin:0;padding:12px}
+.top{background:#c8a94a;color:#000;border-radius:20px;padding:10px 16px;display:flex;justify-content:space-between;font-weight:bold;font-size:14px;margin-bottom:12px}
+.card{background:#1d341d;border:1px solid #2f552f;border-radius:22px;padding:16px;margin-bottom:14px}
+.total-num{font-size:38px;color:#f7d25a;font-weight:900;direction:ltr;margin:6px 0}
+.progress{height:10px;background:#0e1e0e;border-radius:10px;overflow:hidden;margin-top:10px}
+.fill{height:100%;background:#f7d25a;width:0%;transition:.3s}
+.badge{background:#143214;color:#55d67c;border-radius:12px;padding:8px;font-weight:bold;font-size:14px;margin-top:10px;display:block}
+.btn{background:#2a7a2e;color:#fff;border:none;width:100%;padding:14px;border-radius:14px;font-size:20px;font-weight:bold;margin-top:12px}
+.small{font-size:12px;opacity:.8;line-height:1.7}
 </style>
 </head>
 <body>
-<div class="top"><span>جلستك: <span id="sess">107</span></span><span>تسبيحك: <span id="my">1994</span></span></div>
+
+<div class="top">
+<span id="session">جلستك: 0</span>
+<span id="my">تسبيحك: 0</span>
+</div>
 
 <div class="card">
-<div>المجموع الكلي</div>
-<div class="tot"><span id="total">4077</span> / 14000</div>
-<div class="bar"><div id="tbar" class="fill" style="width:29%"></div></div>
-<div style="color:#f7d25a;font-weight:900;margin-top:8px">✅ ختمات 14000 مكتملة: <span id="big">1</span></div>
-<div style="color:#4ade80">مجموع الختمات: 1 ختمة</div>
+<div style="font-weight:bold;margin-bottom:6px">🕊️ الإهداء</div>
+<div class="small">نهدي ثواب الصلاة على محمد وآل محمد إلى جميع الأنبياء والمرسلين والأولياء والصالحين والمؤمنين والمؤمنات المسلمين والمسلمات الأحياء منهم والأموات من الأولين والآخرين</div>
+<hr style="border:0;border-top:1px dashed #2a4a2a;margin:12px 0">
+<div class="small">المجموع الكلي</div>
+<div class="total-num"><span id="total">0</span> / 14000</div>
+<div class="progress"><div id="totalFill" class="fill"></div></div>
+
+<!-- هذا هو اللي طلبتيه الجديد نفس اللي بالدائرة الخضراء بس للـ 14000 -->
+<div class="badge" id="bigBadge">✅ ختمات مكتملة: 0</div>
+<div style="color:#7ed67e;font-size:13px;margin-top:6px">مجموع الختمات: <span id="bigText">0 ختمة</span></div>
 </div>
 
 <div id="list"></div>
 
 <script>
-const names=["النبي محمد صلى الله عليه وآله وسلم","الإمام علي عليه السلام","فاطمة الزهراء عليها السلام","الإمام الحسن عليه السلام","الإمام الحسين عليه السلام","الإمام السجاد عليه السلام","الإمام الباقر عليه السلام","الإمام الصادق عليه السلام","الإمام الكاظم عليه السلام","الإمام الرضا عليه السلام","الإمام الجواد عليه السلام","الإمام الهادي عليه السلام","الإمام العسكري عليه السلام","الإمام المهدي عجل الله فرجه"];
-let counts=JSON.parse(localStorage.getItem('counts')||'[33,538,400,350,300,290,310,330,300,280,270,290,260,276]');
-let khat=JSON.parse(localStorage.getItem('khat')||'[1,0,0,0,0,0]');
-let big=1;
+const NAMES=[
+"النبي محمد صلى الله عليه وآله وسلم",
+"الإمام علي عليه السلام",
+"فاطمة الزهراء عليها السلام",
+"الإمام الحسن عليه السلام",
+"الإمام الحسين عليه السلام",
+"الإمام السجاد عليه السلام",
+"الإمام الباقر عليه السلام",
+"الإمام الصادق عليه السلام",
+"الإمام الكاظم عليه السلام",
+"الإمام الرضا عليه السلام",
+"الإمام الجواد عليه السلام",
+"الإمام الهادي عليه السلام",
+"الإمام العسكري عليه السلام",
+"الإمام المهدي عجل الله فرجه"
+];
+const LIMIT=1000, TOTAL=14000;
+let data=JSON.parse(localStorage.getItem('tasbih14')||'{}');
+let big=parseInt(localStorage.getItem('bigKhatma14')||'0');
+let myCount=parseInt(localStorage.getItem('myCount')||'0');
+let sess=parseInt(localStorage.getItem('sess')||'0');
 
-function save(){localStorage.setItem('counts',JSON.stringify(counts));localStorage.setItem('khat',JSON.stringify(khat));}
+function save(){localStorage.setItem('tasbih14',JSON.stringify(data));localStorage.setItem('bigKhatma14',big);localStorage.setItem('myCount',myCount);localStorage.setItem('sess',sess);render();}
 
-function draw(){
- let total=counts.reduce((a,b)=>a+b,0);
- if(total>=14000){big++;counts=Array(14).fill(0);alert('اكتملت ختمة 14000 رقم '+big+' 🎉');}
- document.getElementById('total').innerText=total;
- document.getElementById('tbar').style.width=(total/140)+'%';
- document.getElementById('big').innerText=big;
- let html='';
- for(let i=0;i<14;i++){
-  if(counts[i]>=1000){counts[i]=0;khat[i]++;}
-  html+=`<div class="card"><div style="font-weight:900">${names[i]}</div><div>${counts[i]} / 1000</div><div class="num">${counts[i]}</div><div class="bar"><div class="fill" style="width:${counts[i]/10}%"></div></div><div class="badge">✅ ختمات مكتملة: ${khat[i]}</div><button class="btn" onclick="add(${i})">+1 صلوات</button></div>`;
- }
- document.getElementById('list').innerHTML=html;
- save();
+function render(){
+let total=0;let html='';
+NAMES.forEach((n,i)=>{
+let v=data[i]||0;total+=v;
+let k=parseInt(localStorage.getItem('k_'+i)||'0');
+let perc=Math.min(100,v/10);
+html+=`<div class="card"><div style="font-weight:bold">${n}</div><div class="small">${v} / 1000</div><div style="font-size:44px;color:#f7d25a;font-weight:900">${v}</div><div class="progress"><div class="fill" style="width:${perc}%"></div></div><div class="badge">✅ ختمات مكتملة: ${k}</div><button class="btn" onclick="add(${i})">+1 صلوات</button></div>`;
+});
+
+// إذا وصل 14000 يتصفر ويحسب ختمة كبيرة جديدة
+if(total>=TOTAL){
+big++;
+localStorage.setItem('bigKhatma14',big);
+alert('ما شاء الله 🎉 اكتملت ختمة الـ 14 ألف رقم '+big+'\nنبدأ ختمة جديدة الآن');
+NAMES.forEach((_,i)=>{data[i]=0;});
+total=0;
+localStorage.setItem('tasbih14',JSON.stringify(data));
 }
-window.add=(i)=>{counts[i]++;let s=parseInt(localStorage.getItem('sess')||'107')+1;let m=parseInt(localStorage.getItem('my')||'1994')+1;localStorage.setItem('sess',s);localStorage.setItem('my',m);document.getElementById('sess').innerText=s;document.getElementById('my').innerText=m;draw();}
-draw();
-document.getElementById('sess').innerText=localStorage.getItem('sess')||'107';
-document.getElementById('my').innerText=localStorage.getItem('my')||'1994';
+
+document.getElementById('total').innerText=total;
+document.getElementById('totalFill').style.width=(total/TOTAL*100)+'%';
+document.getElementById('bigBadge').innerText='✅ ختمات مكتملة: '+big;
+document.getElementById('bigText').innerText=big+' ختمة';
+document.getElementById('my').innerText='تسبيحك: '+myCount;
+document.getElementById('session').innerText='جلستك: '+sess;
+document.getElementById('list').innerHTML=html;
+}
+
+function add(i){
+let v=data[i]||0;v++;myCount++;sess++;
+if(v>=LIMIT){let k=parseInt(localStorage.getItem('k_'+i)||'0')+1;localStorage.setItem('k_'+i,k);v=0;if(navigator.vibrate)navigator.vibrate(100);}
+data[i]=v;save();
+}
+render();
 </script>
 </body>
 </html>
