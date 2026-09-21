@@ -2,31 +2,18 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>مسبحة 14 معصوم</title>
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoibXNiaHAgMTQgbWNzb20iLCJzaG9ydF9uYW1lIjoibXNiaHAiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMDcxYTBlIiwidGhlbWVfY29sb3IiOiIjMDcxYTBlIiwic3RhcnRfdXJsIjoiLiJ9">
+<meta name="theme-color" content="#071a0e">
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#071a0e;color:#fff;font-family:system-ui,Tahoma;padding-bottom:20px}
-.top{margin:12px;background:linear-gradient(#e6c36a,#d1a94a);color:#000;border-radius:24px;padding:14px 18px;display:flex;justify-content:space-between;font-weight:900;font-size:15px;position:sticky;top:8px;z-index:10}
-.card{background:#14331e;border-radius:22px;padding:18px;margin:12px;text-align:center;border:1px solid #234e2a}
-.tot{font-size:44px;font-weight:900;color:#f6d56a;letter-spacing:1px}
-.bar{height:14px;background:#08120a;border-radius:20px;overflow:hidden;margin:12px 0}
-.fill{height:100%;background:linear-gradient(90deg,#f6d56a,#e8b84a);transition:width.4s}
-.khat{color:#4ade80;font-weight:800;background:#0f2e16;padding:7px 14px;border-radius:12px;display:inline-block;font-size:13px}
-.num{font-size:64px;font-weight:900;color:#f6d56a;margin:8px 0}
-.btn{background:#2e7d32;color:#fff;border:0;width:100%;padding:15px;border-radius:16px;font-weight:900;font-size:19px;cursor:pointer}
-.btn:active{transform:scale(.97)}
-.small{opacity:.9;font-size:13px;line-height:1.6}
+*{box-sizing:border-box}body{margin:0;background:#071a0e;color:#fff;font-family:system-ui,Tahoma;padding-bottom:20px}.top{margin:12px;background:linear-gradient(#e6c36a,#d1a94a);color:#000;border-radius:24px;padding:14px 18px;display:flex;justify-content:space-between;font-weight:900;font-size:15px;position:sticky;top:8px;z-index:10}.card{background:#14331e;border-radius:22px;padding:18px;margin:12px;text-align:center;border:1px solid #234e2a}.tot{font-size:44px;font-weight:900;color:#f6d56a}.bar{height:14px;background:#08120a;border-radius:20px;overflow:hidden;margin:12px 0}.fill{height:100%;background:linear-gradient(90deg,#f6d56a,#e8b84a);transition:width.4s}.khat{color:#4ade80;font-weight:800;background:#0f2e16;padding:7px 14px;border-radius:12px;display:inline-block;font-size:13px}.num{font-size:64px;font-weight:900;color:#f6d56a;margin:8px 0}.btn{background:#2e7d32;color:#fff;border:0;width:100%;padding:15px;border-radius:16px;font-weight:900;font-size:19px;cursor:pointer}.small{opacity:.9;font-size:13px;line-height:1.6}
 </style>
 </head>
 <body>
-<div class="top">
-<span id="myS">جلستك: 0</span>
-<span id="myT">تسبيحك: 1994</span>
-</div>
+<div class="top"><span id="myS">جلستك: 0</span><span id="myT">تسبيحك: 1994</span></div>
 <div class="card">
-<div class="small">🕊️ الإهداء - نهدي ثواب الصلاة على محمد وآل محمد إلى جميع الأنبياء والأولياء والصالحين والمؤمنين</div>
-<br>
+<div class="small">🕊️ الإهداء - نهدي ثواب الصلاة على محمد وآل محمد إلى جميع الأنبياء والأولياء والصالحين والمؤمنين</div><br>
 <div class="small">المجموع الكلي</div>
 <div class="tot"><span id="totalN">0</span> / 14000</div>
 <div class="bar"><div class="fill" id="totalBar"></div></div>
@@ -38,57 +25,15 @@ body{margin:0;background:#071a0e;color:#fff;font-family:system-ui,Tahoma;padding
 const NAMES=["النبي محمد صلى الله عليه وآله وسلم","الإمام علي عليه السلام","السيدة فاطمة الزهراء عليها السلام","الإمام الحسن عليه السلام","الإمام الحسين عليه السلام","الإمام السجاد عليه السلام","الإمام الباقر عليه السلام","الإمام الصادق عليه السلام","الإمام الكاظم عليه السلام","الإمام الرضا عليه السلام","الإمام الجواد عليه السلام","الإمام الهادي عليه السلام","الإمام العسكري عليه السلام","الإمام المهدي عج"];
 const DEFAULT_COUNTS=[36,549,420,350,360,300,310,330,310,300,290,280,270,136];
 const DEFAULT_KHATS=[1,0,0,0,0,0];
-let counts = JSON.parse(localStorage.getItem('counts')||'null');
-let khats = JSON.parse(localStorage.getItem('khats')||'null');
-let bigK = parseInt(localStorage.getItem('bigK')||'1');
-let myT = parseInt(localStorage.getItem('myT')||'1994');
-let myS = 0;
-if(!counts || counts.reduce((a,b)=>a+b,0)===0){
-  counts=[...DEFAULT_COUNTS];
-  khats=[...DEFAULT_KHATS];
-  bigK=1;
-}
-function save(){
-  localStorage.setItem('counts',JSON.stringify(counts));
-  localStorage.setItem('khats',JSON.stringify(khats));
-  localStorage.setItem('bigK',bigK);
-  localStorage.setItem('myT',myT);
-}
-function render(){
-  let total=counts.reduce((a,b)=>a+b,0);
-  if(total>=14000){
-    bigK++;
-    counts=counts.map(()=>0);
-    khats=khats.map(v=>v+1);
-    total=0;
-    save();
-    alert('🎉 اكتملت ختمة 14000! بدأت ختمة جديدة - مجموع الختمات: '+bigK);
-  }
-  document.getElementById('totalN').textContent=total;
-  document.getElementById('totalBar').style.width=(total/140)+'%';
-  document.getElementById('bigK').textContent='✅ ختمات 14000 مكتملة: '+bigK;
-  document.getElementById('bigK2').textContent='مجموع الختمات: '+bigK+' ختمة';
-  document.getElementById('myT').textContent='تسبيحك: '+myT;
-  document.getElementById('myS').textContent='جلستك: '+myS;
-  document.getElementById('list').innerHTML=NAMES.map((n,i)=>`
-    <div class="card">
-      <div style="font-weight:900;font-size:16px;margin-bottom:4px">${n}</div>
-      <div class="small">${counts[i]} / 1000</div>
-      <div class="num">${counts[i]}</div>
-      <div class="bar"><div class="fill" style="width:${(counts[i]/10)}%"></div></div>
-      <div class="khat">✅ ختمات مكتملة: ${khats[i]}</div>
-      <button class="btn" onclick="add(${i})">+1 صلوات</button>
-    </div>`).join('');
-}
-function add(i){
-  counts[i]++;
-  myT++;
-  myS++;
-  if(counts[i]>=1000){counts[i]=0;khats[i]++;}
-  save();
-  render();
-  if(navigator.vibrate) navigator.vibrate(40);
-}
+let counts=JSON.parse(localStorage.getItem('counts')||'null');
+let khats=JSON.parse(localStorage.getItem('khats')||'null');
+let bigK=parseInt(localStorage.getItem('bigK')||'1');
+let myT=parseInt(localStorage.getItem('myT')||'1994');
+let myS=0;
+if(!counts||counts.reduce((a,b)=>a+b,0)===0){counts=[...DEFAULT_COUNTS];khats=[...DEFAULT_KHATS];bigK=1;}
+function save(){localStorage.setItem('counts',JSON.stringify(counts));localStorage.setItem('khats',JSON.stringify(khats));localStorage.setItem('bigK',bigK);localStorage.setItem('myT',myT);}
+function render(){let total=counts.reduce((a,b)=>a+b,0);if(total>=14000){bigK++;counts=counts.map(()=>0);khats=khats.map(v=>v+1);total=0;save();alert('🎉 اكتملت ختمة 14000!');}document.getElementById('totalN').textContent=total;document.getElementById('totalBar').style.width=(total/140)+'%';document.getElementById('bigK').textContent='✅ ختمات 14000 مكتملة: '+bigK;document.getElementById('bigK2').textContent='مجموع الختمات: '+bigK+' ختمة';document.getElementById('myT').textContent='تسبيحك: '+myT;document.getElementById('myS').textContent='جلستك: '+myS;document.getElementById('list').innerHTML=NAMES.map((n,i)=>`<div class="card"><div style="font-weight:900;font-size:16px;margin-bottom:4px">${n}</div><div class="small">${counts[i]} / 1000</div><div class="num">${counts[i]}</div><div class="bar"><div class="fill" style="width:${counts[i]/10}%"></div></div><div class="khat">✅ ختمات مكتملة: ${khats[i]}</div><button class="btn" onclick="add(${i})">+1 صلوات</button></div>`).join('');}
+function add(i){counts[i]++;myT++;myS++;if(counts[i]>=1000){counts[i]=0;khats[i]++;}save();render();if(navigator.vibrate)navigator.vibrate(40);}
 render();
 </script>
 </body>
