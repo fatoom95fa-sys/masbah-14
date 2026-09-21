@@ -27,7 +27,7 @@ body{margin:0;background:#071a0e;color:#fff;font-family:system-ui,Tahoma;padding
 </div>
 
 <div class="card">
-<div class="small">🕊️ الإهداء - نهدي ثواب الصلاة على محمد وآل محمد إلى جميع الأنبياء والأولياء والصالحين والمؤمنين</div>
+<div class="small">🕊️ الإهداء - نهدي ثواب الصلاة على محمد وآل محمد إلى جميع الأنبياء والمرسلين والأولياء والصالحين والمؤمنين والمؤمنات والمسلمين والمسلمات الأحياء منهم والأموات من الأولين والآخرين</div>
 <br>
 <div class="small">المجموع الكلي</div>
 <div class="tot"><span id="totalN">0</span> / 14000</div>
@@ -51,8 +51,8 @@ let bigK = parseInt(localStorage.getItem('bigK')||'1');
 let myT = parseInt(localStorage.getItem('myT')||'1994');
 let myS = parseInt(localStorage.getItem('myS')||'107');
 
-// اذا فاضي يبدأ من حسبتك الحالية
-if(!counts || counts.reduce((a,b)=>a+b,0)===0){
+// التعديل 1: يبدأ من حسبتك فقط اول مرة، بعدها ما يتصفر ابدا عند الدخول والخروج
+if(!counts){
   counts=[...DEFAULT_COUNTS];
   khats=[...DEFAULT_KHATS];
   bigK=1;
@@ -68,7 +68,7 @@ function save(){
 
 function render(){
   let total=counts.reduce((a,b)=>a+b,0);
-  // الميزة: اذا كمل 14000 يتصفر لحاله
+  // اذا كمل 14000 يتصفر لحاله لختمة جديدة
   if(total>=14000){
     bigK++;
     counts=counts.map(()=>0);
